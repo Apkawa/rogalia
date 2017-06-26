@@ -20,7 +20,7 @@ var config = {
         language: function(current) {
             return  (current)
                 ? game.lang
-                : ["en", "ru", "ja", "pt-br", "zh-cht"];
+                : ["en", "ru", "ja", "pt-br", "zh-cht", "zh-chs"];
         },
         hp: true,
         name: true,
