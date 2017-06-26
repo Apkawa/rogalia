@@ -140,8 +140,9 @@ Skills.prototype = {
     },
 
     learn: function(e) {
-        if (!this.current)
+        if (!this.current) {
             game.error("No selected skill");
+        }
         game.network.send("learn-skill", {name: this.current.name });
     },
 };

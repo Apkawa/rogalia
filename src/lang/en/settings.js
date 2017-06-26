@@ -96,9 +96,9 @@ Settings.descriptions = {
             "Center screen",
             "If enabled, game area centers on screen center. If disabled, game area is placed on the left.",
         ],
-        fastRender: [
-            "Fast rendering",
-            "Simplified map rendering using GPU (WebGL). It can significantly increase performance.",
+        gpuRender: [
+            "GPU rendering",
+            "Map rendering using GPU (WebGL). It should increase performance.",
         ],
     },
     sound:  {

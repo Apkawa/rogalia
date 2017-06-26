@@ -1290,10 +1290,7 @@ class Character {
     }
 
     toggleActionSound() {
-        if (this.action.name) {
-            game.sound.stopSound(this.action.name);
-        }
-
+        game.sound.stopSound(this.action.name);
         this.action.name = this.Action.Name;
 
         if (!this.Action.Duration) {
@@ -1976,7 +1973,7 @@ class Character {
             : Math.hypot(this.X - e.X, this.Y - e.Y);
     }
 
-    selectNextTarget(p = new Point(this), ignore = this.target) {
+    selectNextTarget(p = new Point(this), ignore = this.target, anchor = p) {
         var party = this.Party || [];
         var list = game
             .findCharsNear(p.x, p.y, 5 * CELL_SIZE)
@@ -1992,7 +1989,7 @@ class Character {
                 }
                 return party.indexOf(c.Name) == -1;
             })
-            .sort((a, b) => new Point(a).distanceTo(p) - new Point(b).distanceTo(p));
+            .sort((a, b) => new Point(a).distanceTo(anchor) - new Point(b).distanceTo(anchor));
 
         if (list.length > 0) {
             this.setTarget(list[0]);
@@ -2088,7 +2085,9 @@ class Character {
         panel && panel.setContents(panel.quest.getContents());
     }
 
-    onremove() {}
+    onremove() {
+        game.sound.stopSound(this.action.name);
+    }
 
     shot(x = 0, y = 0) {
         if (this.target instanceof Character) {

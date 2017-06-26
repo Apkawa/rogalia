@@ -159,7 +159,43 @@ Character.spritesInfo = {
         speed: 20000,
         offset: 100,
     },
-    "imp": {
+    "rift-imp": {
+        width: 110,
+        height: 110,
+        offset: 20,
+        nameOffset: 75,
+        speed: 7000,
+        animations: {
+            idle: {
+                speed: 20000,
+            }
+        }
+    },
+    "fallen-imp": {
+        width: 110,
+        height: 110,
+        offset: 20,
+        nameOffset: 75,
+        speed: 7000,
+        animations: {
+            idle: {
+                speed: 20000,
+            }
+        }
+    },
+    "fiend": {
+        width: 126,
+        height: 126,
+        offset: 20,
+        nameOffset: 75,
+        speed: 7000,
+        animations: {
+            idle: {
+                speed: 20000,
+            }
+        }
+    },
+    "expelled-imp": {
         width: 110,
         height: 110,
         offset: 20,
@@ -192,10 +228,15 @@ Character.spritesInfo = {
         }
     },
     "prince-of-darkness": {
-        width: 214,
-        height: 135,
-        nameOffset: 100,
+        width: 150,
+        height: 150,
+        nameOffset: 110,
         speed: 50000,
+        animations: {
+            run: {
+                speed: 15000,
+            }
+        }
     },
     "daemon": {
         width: 150,
@@ -319,11 +360,12 @@ Character.spritesInfo = {
         height: 80,
         offset: 30,
         nameOffset: 40,
-},
+    },
     "training-dummy": {
         width: 55,
         height: 67,
         angle: 0,
+        nameOffset: 70,
     },
     "blue-chopper": {
         width: 146,

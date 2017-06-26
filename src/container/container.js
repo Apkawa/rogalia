@@ -347,7 +347,6 @@ Container.prototype = {
             }
             var entity = Entity.get(id);
             if (!entity) {
-                // game.sendErrorf("Entity with id %d is not found in container %d", id, this.id);
                 continue;
             }
             const subContainer = game.containers[entity.Id];

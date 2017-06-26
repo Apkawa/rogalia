@@ -185,7 +185,7 @@ function Sound() {
             console.warn("Sound " + name + " not found");
             return;
         }
-        sound.onloadeddata = function() {
+        sound.onloadeddata = () => {
             sound.currentTime = 0;
             sound.volume = config.sound.soundVolume;
             sound.play();
@@ -193,14 +193,17 @@ function Sound() {
         sound.load();
         if (repeat !== undefined) {
             repeat = repeat || 1000;
-            sound.repeat = setTimeout(this.playSound.bind(this, name, repeat), repeat);
+            sound.repeat = setTimeout(() => {
+                this.playSound(name, repeat);
+            }, repeat);
         }
     };
 
     this.stopSound = function(name) {
         var sound = this.sounds[name];
-        if (!sound)
+        if (!sound) {
             return;
+        }
         sound.pause();
         if (sound.repeat) {
             clearTimeout(sound.repeat);

@@ -573,14 +573,12 @@ function Chat() {
         ]
     ).show();
 
-    this.removeAlert = game.controller.makeHighlightCallback("chat", false);
-
-    this.panel.hooks.show = function() {
+    this.panel.hooks.show = () => {
         this.initNotifications();
         this.newMessageElement.blur(); //fixes escape on empty input
         this.newMessageElement.focus();
-        this.removeAlert();
-    }.bind(this);
+        game.controller.highlight("chat", false);
+    };
 
     this.newMessageElement.onfocus = function() {
         semi.focus = true;

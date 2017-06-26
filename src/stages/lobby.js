@@ -34,10 +34,6 @@ function lobbyStage(data) {
         ));
     }
 
-    characters = characters.sort(function(a, b) {
-        return a.Name > b.Name;
-    });
-
     characters.forEach(function(info) {
         const avatar = Character.makeAvatar(Character.sex(info.Sex), info.Hairstyle);
         add({name:  info.Name, karma: info.Karma, avatar}, function() {

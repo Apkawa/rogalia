@@ -75,7 +75,11 @@ class Game {
 
         this.iso = new IsoDrawer(this.ctx);
 
-        if (config.graphics.fastRender) {
+        if (game.args["no-gpu"]) {
+            config.graphics.gpuRender = false;
+        }
+
+        if (config.graphics.gpuRender) {
             this.webgl = new WebglRenderer();
             const {canvas} = this.webgl;
             canvas.classList.add("map-canvas");
@@ -220,16 +224,16 @@ class Game {
 
         this.professions = new Professions();
 
-        window.onerror = function(msg, url, line, column) {
+        window.onerror = function(msg, url, line, column, {stack = "NO_STACK"}) {
             window.onerror = null;
-            game.sendError([
-                "Client error:",
+            game.sendError({
                 msg,
-                "Url: " + url,
-                "Line: " + line,
-                "Column: " + column,
-                "UA: " + navigator.userAgent,
-            ].join("|"));
+                url,
+                line,
+                column,
+                ua: navigator.userAgent,
+                stack: stack.split("\n").map(row => row.trim()),
+            });
             game.exit(T("Client error. Refresh page or try again later."));
             return false;
         };
@@ -277,9 +281,15 @@ class Game {
             return this.proto() + "//" + gateway + "/gateway";
         }
 
-        return (game.args["steam"])
-            ? "http://quasar.rogalik.tatrix.org/gateway"
-            : this.proto() + "//quasar.rogalik.tatrix.org/gateway";
+        if (game.args["steam"]) {
+            return "http://quasar.rogalik.tatrix.org/gateway";
+        }
+
+        if (document.location.pathname == "/centauri/") {
+            return this.proto() + "//rogalik.tatrix.org/gateway";
+        }
+
+        return this.proto() + "//quasar.rogalik.tatrix.org/gateway";
     }
 
     proto() {
@@ -395,13 +405,13 @@ class Game {
     }
 
     setStage(name, params) {
-        this.screen.update();
         document.body.classList.remove(this.stage.name + "-stage");
         this.stage.end();
         this.ctx.clear();
         this.stage = new window[name + "Stage"](params);
         this.stage.name = name;
         document.body.classList.add(name + "-stage");
+        this.screen.update();
     }
 
     reload() {
@@ -493,6 +503,7 @@ class Game {
 
     removeCharacterById(id) {
         var c = this.entities.get(id);
+        c.onremove();
         this.sortedEntities.remove(c);
         var name = c.name || c.Id;
         this.entities.remove(id);
@@ -528,20 +539,16 @@ class Game {
 
     sendError(msg) {
         if (this.network && this.network.socket) {
-            this.network.send("error", {msg: msg});
+            this.network.send("error", {msg});
         }
-    }
-
-    sendErrorf() {
-        this.sendError(sprintf.apply(window, arguments));
     }
 
     inVK() {
         return (window.name.indexOf("fXD") == 0);
     }
 
-    error() {
-        this.sendErrorf.apply(this, arguments);
+    error(msg) {
+        this.sendError(msg);
         this.exit();
         throw "Fatal error";
     }

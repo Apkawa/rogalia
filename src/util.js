@@ -401,6 +401,10 @@ var util = new function() {
         return result;
     };
 
+    this.isChrome = function() {
+        return window.chrome && window.navigator.userAgent.indexOf("Edge") == -1;
+    };
+
 };
 
 if (!Math.hypot) {

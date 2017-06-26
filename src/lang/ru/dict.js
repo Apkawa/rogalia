@@ -653,6 +653,7 @@ T.dict = {
     "Get branch": "Сорвать ветку",
     "Get seed": "Получить семена",
     "Get banana": "Сорвать банан",
+    "Gather all": "Собрать все",
     "Perch": "Окунь",
     "Stone tower": "Каменный столб",
     "Onion seed": "Семена лука",
@@ -1940,4 +1941,8 @@ T.dict = {
     "Rune of teleportation": "Руна телепортации",
     "Rune of immortality": "Руна бессмертия",
     "Runebook": "Книга рун",
+    "watch": "Часы", // stupid firefox https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Object/watch
+    "Achievements": "Достижения",
+    "Quests": "Квесты",
+    "Update": "Обновить",
 };

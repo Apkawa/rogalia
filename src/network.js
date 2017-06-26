@@ -1,4 +1,4 @@
-/* global game */
+/* global game, T, util, WebSocket */
 
 "use strict";
 function Network() {
@@ -28,8 +28,9 @@ function Network() {
 
         function onDisconnect() {
             game.clearServerInfo();
-            if (game.chat)
+            if (game.chat) {
                 game.chat.addMessage({From: "[Rogalik]", Body: "Disconnected"});
+            }
             game.exit(T("Disconnected"));
         }
 
@@ -115,5 +116,21 @@ function Network() {
     //for debug
     this.sendRaw = function(cmd) {
         this.socket.send(JSON.stringify(cmd));
+    };
+
+    const pingQuality = [
+        [100, "#03ce03", "perfect"],
+        [200, "#0f980f", "good"],
+        [300, "#dcb809", "satisfactorily"],
+        [+Infinity, "#d40a0a", "bad"],
+    ];
+
+    this.pingQuality = function(ping) {
+        for (const [limit, color, title] of pingQuality) {
+            if (ping < limit) {
+                return {color, title};
+            }
+        }
+        return pingQuality[pingQuality.length-1];
     };
 }

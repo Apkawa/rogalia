@@ -1,4 +1,4 @@
-/* global game, FormData, dom, Panel, Stage, T */
+/* global game, FormData, dom, Panel, Stage, T, util */
 
 "use strict";
 
@@ -13,10 +13,19 @@ function loginStage() {
     if (game.args["steam"]) {
         this.draw = Stage.makeEllipsisDrawer();
         steamLogin();
-    } else if (game.inVK())
+    } else if (game.inVK()) {
         vkLogin();
-    else
+    } else {
         showLoginForm();
+        if (!util.isChrome()) {
+            const warning = T("Only Google Chrome is officially supported!");
+            this.draw = function() {
+                game.ctx.clear();
+                game.ctx.fillStyle = "#f42";
+                game.drawStrokedText(warning, 32, 32);
+            };
+        }
+    }
 
     function showLoginForm() {
         var login = dom.input(T("Login") + "/" + T("Email"), game.getLogin());

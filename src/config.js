@@ -10,11 +10,11 @@ const DEFAULT_CLIENT_HEIGHT = 720;
 var config = {
     character: {
         // pathfinding: false,
-        hideHelmet: function() { return game.player.Style.HideHelmet; },
+        hideHelmet: () => game.player.Style.HideHelmet,
         rotateWasd: false,
         autoTarget: true,
         autoAttack: false,
-        obstacleAvoidance: function() { return game.player.Settings.ObstacleAvoidance; },
+        obstacleAvoidance: () => game.player.Settings.ObstacleAvoidance,
     },
     ui: {
         language: function(current) {
@@ -36,6 +36,7 @@ var config = {
     },
     graphics: {
         fullscreen: false,
+        gpuRender: true,
         autoHighlightDoors: false,
         snowflakes: false,
         movingSpace: false,
@@ -43,7 +44,6 @@ var config = {
         autoHideWalls: true,
         autoHideObjects: true,
         semiTransparentWalls: true,
-        fastRender: false,
         topologicalSort: false,
         // drawPath: true,
     },

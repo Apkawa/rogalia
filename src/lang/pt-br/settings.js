@@ -19,7 +19,7 @@ Settings.descriptions = {
             "Automaticamente seleciona o alvo mais próximo do cursor.",
         ],
         obstacleAvoidance: [
-            "Desvio de obstáculos",
+            "Desviar de obstáculos",
             "Ajudará a evitar um pouco a colisão com obstáculos.",
         ],
     },
@@ -83,8 +83,8 @@ Settings.descriptions = {
             "Mostra a neve caindo.",
         ],
         movingSpace: [
-            "Espaço de movimento",
-            "Ativa espaço de movimentação na beira do mapa.",
+            "Movimentar espaço",
+            "Ativa a movimentação do epaço no final do mapa.",
         ],
         autoHideWalls: [
             "Auto esconder paredes",
@@ -96,27 +96,23 @@ Settings.descriptions = {
         ],
         centerScreen: [
             "Centralizar tela",
-            "Se ativada, a tela do jogo mantem-se no meio da tela.",
-            "Se desativada, a tela do jogo é mantida à esquerda.",
+            "Se ativada, a tela do jogo mantem-se no meio da tela. Se desativada, a tela do jogo é mantida à esquerda.",
         ],
         autoHideObjects: [
             "Auto Ocultar o objetos",
             "Ocultar automaticamente um objeto, tais como edifícios e árvores.",
         ],
-        semiTransparetWalls: [
+        semiTransparentWalls: [
             "Parades semi-transparentes",
             "Deixar as paredes transparentes próximas ao personagem.",
         ],
-        fastRender: [
-            "Renderização rápida",
-            "Simplifica alguns gráficos e usa placa de vídeo(webgl) para renderizar.",
-            "Díminui a qualidade de imagem porém aumentará o desempenho, util em computadores mais fracos.",
-            "* Ao selecionar o jogo será reiniciado.",
+        gpuRender: [
+            "Renderização GPU",
+            "Rederiza os gráficos utilizando sua GPU (WebGL). Aumenta a performance do jogo.",
         ],
         topologicalSort: [
             "Ordenação topológica",
-            "Exibir corretamente a ordem das construções, instalações e exibição de materiais.",
-            "* O desempenho pode ser reduzido.",
+            "Exibir corretamente a ordem das construções, instalações e exibição de materiais. \n * O desempenho pode ser reduzido.",
         ],
     },
     sound: {

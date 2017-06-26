@@ -4,10 +4,10 @@
 
 class Profile {
     constructor() {
-        this.email = dom.input("Email");
+        this.email = dom.input(T("Email"));
 
-        this.password = dom.input("Password", "", "password");
-        this.repeatPassword = dom.input("Repeat password", "", "password");
+        this.password = dom.input(T("Password"), "", "password");
+        this.repeatPassword = dom.input(T("Repeat password"), "", "password");
 
         this.email.onkeyup = (event) => {
             this._validate(this.email, this.email.value != "");

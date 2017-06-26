@@ -281,6 +281,17 @@ var dom = {
         canvas.height = h || 0;
         return canvas;
     },
+    /* * * */
+
+    fadeOut: function(element) {
+        element.classList.add("fade-out");
+        const remove = () => {
+            element.removeEventListener("transitionend", remove);
+            this.remove(element);
+        };
+        element.addEventListener("transitionend", remove);
+    },
+
     /* * * * * */
     remove: function(element) {
         element.parentNode.removeChild(element);

@@ -180,7 +180,7 @@ Sprite.prototype = {
                 0, 0, this.width, this.height
             );
         } catch(e) {
-            game.sendError("Cannot load " + this.name + " icon");
+            game.sendError(`Cannot load {$this.name} icon`);
         }
     },
 };

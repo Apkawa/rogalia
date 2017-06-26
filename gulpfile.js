@@ -50,7 +50,6 @@ gulp.task("bump", function() {
     var version = JSON.parse(fs.readFileSync("./package.json")).version.split(".");
     var hash = version[0] + "." + version[1] + "." + commit;
 
-
     return gulp.src('index.html')
         .pipe(htmlreplace({
             css: "bundle.css?v=" + hash,
@@ -84,8 +83,8 @@ gulp.task("nwbuild", function() {
         flavor: "normal",
         // flavor: "sdk",
         cacheDir: "./build/cache/",
-        // platforms: ["win32", "linux64", "linux32", "osx64"],
-        platforms: ["win32", "osx64"],
+        platforms: ["win32", "linux64", "linux32", "osx64"],
+        //platforms: ["linux64"],
         version: "0.22.3",
     });
 

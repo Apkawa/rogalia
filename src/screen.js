@@ -1,4 +1,4 @@
-/* global game */
+/* global game, DEFAULT_CLIENT_WIDTH, DEFAULT_CLIENT_HEIGHT, CELL_SIZE */
 
 "use strict";
 
@@ -10,8 +10,8 @@ class Screen {
         this.cells_y = 0;
     }
 
-    update() {
-        if (game.fullscreen) {
+    update(fullscreen = (game.stage.name == "main") ? game.fullscreen : false) {
+        if (fullscreen) {
             this.width = window.innerWidth;
             this.height = window.innerHeight;
         } else {

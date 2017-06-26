@@ -1,14 +1,26 @@
-/* global game, Quest, dom, T, util, Panel */
+/* global game, Quest, dom, T, util, Panel, Achievements */
 
 "use strict";
 function Journal() {
     this.list = dom.div("journal-list");
     this.view = dom.div("journal-quest");
-    this.panel = new Panel("journal", "Journal", [
-        this.list,
-        dom.vr(),
-        this.view,
-    ]);
+    this.tabs = [
+        {
+            title: T("Quests"),
+            contents: dom.wrap("journal-contents", [
+                this.list,
+                dom.vr(),
+                this.view,
+            ]),
+        },
+        {
+            title: T("Achievements"),
+            update: (title, contents) => {
+                Achievements.loadInto(contents);
+            }
+        }
+    ];
+    this.panel = new Panel("journal", "Journal", dom.tabs(this.tabs));
     this.quests = [];
 
     this.hash = "";

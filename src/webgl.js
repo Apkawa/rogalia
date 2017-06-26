@@ -1,4 +1,4 @@
-/* global fetch, m4, game, CELL_SIZE, Point, Image */
+/* global fetch, m4, game, CELL_SIZE, Point, Image, Settings */
 
 "use strict";
 
@@ -16,16 +16,23 @@ class WebglRenderer {
         this.minimap = new Uint8Array(this.width * this.height * 4);
     }
 
-    async load(data) {
+    async load(data, width, height) {
         const {gl} = this;
 
         const vs = await this.loadShader("map.vs");
-        const fs = await this.loadShader("map.fs");
+        const fs = await this.loadShader(game.args["no-transitions"] ? "map-no-transitions.fs" : "map.fs");
 
         const vertexShader = this.createShader(gl, gl.VERTEX_SHADER, vs);
         const fragmentShader = this.createShader(gl, gl.FRAGMENT_SHADER, fs);
 
         const program = this.createProgram(gl, vertexShader, fragmentShader);
+        if (!program) {
+            game.popup.alert(T("GPU error occured. Falling back to a soft renderer."), () => {
+                Settings.toggle("settings.graphics.gpuRender");
+                game.reload();
+            });
+            return;
+        }
         this.program = program;
 
         this.positionLocation = gl.getAttribLocation(program, "a_position");
@@ -46,34 +53,42 @@ class WebglRenderer {
         this.texture = await this.loadImageAndCreateTexture("assets/map/map.png");
 
         this.minimapTexture = gl.createTexture();
-        this.updateMinimap(data);
+        this.updateMinimap(data, width, height);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
 
         game.map.ready = true;
     }
 
-    convertData(data) {
+    convertData(data, width, height) {
         let i = 0;
-        for (const color of data) {
-            this.minimap[i + 0] = game.map.colorMap[color];
-            this.minimap[i + 1] = game.map.textureMap[color];
-            i += 4;
+        for (let y = 0; y < this.width; y++) {
+            for (let x = 0; x < this.width; x++) {
+                if (x < width || y < height) {
+                    const color = data[y * width + x];
+                    this.minimap[i + 0] = game.map.colorMap[color];
+                    this.minimap[i + 1] = game.map.textureMap[color];
+                } else {
+                    this.minimap[i + 0] = 0;
+                    this.minimap[i + 1] = 0;
+                }
+                i += 4;
+            }
         }
         return this.minimap;
     }
 
-    async sync(data) {
+    async sync(data, width, height) {
         const {gl} = this;
         if (this._loaded) {
-            this.updateMinimap(data);
+            this.updateMinimap(data, width, height);
         } else {
             this._loaded = true;
-            this.load(data);
+            this.load(data, width, height);
         }
     }
 
-    updateMinimap(data) {
+    updateMinimap(data, width, height) {
         const {gl} = this;
         gl.bindTexture(gl.TEXTURE_2D, this.minimapTexture);
         gl.texImage2D(
@@ -85,7 +100,7 @@ class WebglRenderer {
             0,
             gl.RGBA,
             gl.UNSIGNED_BYTE,
-            this.convertData(data)
+            this.convertData(data, width, height)
         );
     }
 
@@ -127,16 +142,22 @@ class WebglRenderer {
 
     createProgram(gl, vertexShader, fragmentShader) {
         const program = gl.createProgram();
-        gl.attachShader(program, vertexShader);
-        gl.attachShader(program, fragmentShader);
-        gl.linkProgram(program);
-        const success = gl.getProgramParameter(program, gl.LINK_STATUS);
-        if (success) {
-            return program;
-        }
+        try {
+            gl.attachShader(program, vertexShader);
+            gl.attachShader(program, fragmentShader);
+            gl.linkProgram(program);
+            const success = gl.getProgramParameter(program, gl.LINK_STATUS);
+            if (success) {
+                return program;
+            }
 
-        console.error(gl.getProgramInfoLog(program));
-        gl.deleteProgram(program);
+            console.error(gl.getProgramInfoLog(program));
+            gl.deleteProgram(program);
+        } catch(error) {
+            // old video cards will fail like
+            // gl.getExtension('WEBGL_lose_context').loseContext();
+            console.error("Webgl:", error);
+        }
         return null;
     }
 

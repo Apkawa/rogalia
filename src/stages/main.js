@@ -10,7 +10,7 @@ function mainStage(data) {
     game.controller.chat.init(data.Chat);
     game.pixi && game.pixi.updateMap();
 
-    this.sync = function (data) {
+    this.sync = function(data) {
         if (data.Warning) {
             game.controller.showWarning(data.Warning);
             return;

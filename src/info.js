@@ -1,4 +1,4 @@
-/* global game, Missile, FONT_SIZE, TT, Container, dom, T, Panel, util, Trade */
+/* global game, Missile, FONT_SIZE, TT, Container, dom, T, Panel, util, Trade, Achievements */
 
 "use strict";
 function Info(message, character) {
@@ -127,11 +127,10 @@ function Info(message, character) {
     case "item-gain":
         if (this.character.isPlayer) {
             var ids = ("Ids" in this.data) ? this.data.Ids : [this.data.Id];
-            game.controller.highlight("inventory", true);
+            game.controller.highlightItemsGain(ids.length);
             ids.forEach(function(id) {
                 var entity = Entity.get(id);
                 if (!entity) {
-                    // game.sendErrorf("(Info.js) Cannot find item %d", id);
                     return;
                 }
 
@@ -174,6 +173,9 @@ function Info(message, character) {
         return;
     case ".trade":
         game.controller.trade.update(this.data);
+        return;
+    case ".achievement-unlocked":
+        Achievements.showUnlockTooltip(this.data);
         return;
     }
     this.value = util.toFixed(this.value, (this.value < 1) ? 2 : 0);

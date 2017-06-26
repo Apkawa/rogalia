@@ -1,4 +1,4 @@
-/* global game, Panel, dom, config, _, TS, util */
+/* global game, Panel, dom, config, _, TS, util, gameStorage, T */
 
 "use strict";
 function Settings() {
@@ -62,9 +62,6 @@ function Settings() {
         },
         "settings.graphics.fullscreen": function(enabled) {
             game.toggleFullscreen();
-            // if (enabled && !config.graphics.fastRender) {
-            //     Settings.toggle("settings.graphics.fastRender");
-            // }
         },
         "settings.graphics.movingSpace": function(moving) {
             if (moving)
@@ -80,10 +77,7 @@ function Settings() {
         "settings.graphics.centerScreen": function() {
             game.world.classList.toggle("snap-left");
         },
-        "settings.graphics.fastRender": function(enabled) {
-            // if (!enabled && config.graphics.fullscreen) {
-            //     Settings.toggle("settings.graphics.fullscreen");
-            // }
+        "settings.graphics.gpuRender": function(enabled) {
             game.reload();
         },
         "settings.character.pathfinding": function() {

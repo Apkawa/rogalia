@@ -2,138 +2,63 @@ precision mediump float;
 
 varying vec2 v_position;
 
-uniform sampler2D u_texture;
 uniform sampler2D u_minimap;
+uniform sampler2D u_texture;
 uniform vec2 u_location;
 
 const float tile_size = 64.0;
 const float map_size = 4096.0; // 64 * 64
 
-const float map_tex_width = 512.0;
-const float map_tex_height = 1536.0;
+const float transition_tile_size = 64.0;
+const float transitions_biom_width = transition_tile_size * 4.0;
+const float transitions_biom_height = transitions_biom_width + transition_tile_size;
+const float transitions_size = transitions_biom_width * 8.0;
+const float transitions_k = transition_tile_size / transitions_size;
 
-float tex_map_coord(float coord, float size) {
-    float fix = size / tile_size;
-    return ceil(mod(coord * map_size, tile_size))/(size + fix);
+ivec2 biom_to_ibiom(vec4 biom) {
+    return ivec2(biom.xy * 256.0);
 }
 
-vec2 tex_map_point(vec2 pos) {
-    return vec2(tex_map_coord(pos.x, map_tex_width), tex_map_coord(pos.y, map_tex_height));
+vec2 ibiom_position_offset(vec2 variant, ivec2 ibiom) {
+    const int bioms_per_row = int(transitions_size / transitions_biom_width);
+    vec2 offset = variant * transitions_k;
+    offset.x += float(ibiom.y) * (transitions_biom_width / transitions_size);
+    offset.y += float(ibiom.y/bioms_per_row) * (transitions_biom_height / transitions_size);
+    return offset;
 }
 
-float tex_map_offset(float index) {
-    return index*tile_size/map_tex_height;
+vec2 ibiom_uv(vec2 v_position, vec2 variant, vec2 delta, ivec2 ibiom) {
+    vec2 transitions_pos = ibiom_position_offset(variant, ibiom);
+
+    vec2 p = v_position * map_size;
+    p.x = mod(p.x, tile_size);
+    p.y = mod(p.y, tile_size);
+    p /= tile_size;
+    p += delta;
+    p *= transitions_k;
+
+    return transitions_pos + p;
 }
 
-float tex_map_variant(vec2 position, float variants) {
-    vec2 p = floor(position*map_size / tile_size) + u_location;
-    float total_variants_num = (map_tex_width / tile_size);
-    float rand = (1.0 + sin(p.x * p.y)) / 2.0; // [0 .. 1]
-    // min() is a hack for mac/win
-    return min(variants - 1.0, floor(rand * variants)) / total_variants_num;
+vec2 random_delta(vec2 v_position) {
+    vec2 delta = vec2(0.0, 0.0);
+    vec2 p = floor(v_position*map_size / tile_size) + u_location;
+    float rand = sin(p.x * p.y) / 2.0; // [0 .. 1]
+    if (rand > 0.3) {
+        delta.y = 1.0;
+    } else if (rand < -0.3) {
+        delta.y = 4.0;
+    }
+
+    if (cos(p.x * p.y) > 0.0) {
+        delta.x = 3.0;
+    }
+
+    return delta;
 }
 
 void main() {
     vec4 biom = texture2D(u_minimap, v_position);
-    vec2 p = tex_map_point(v_position);
-
-    int red = int(biom.r * 256.0);
-    int blue = int(biom.b * 256.0);
-
-    if (red == 32) {
-        // deep water
-        p.x += tex_map_variant(v_position, 8.0);
-    } else if (red == 36) {
-        // shallow-water
-        p.y += tex_map_offset(1.0);
-        p.x += tex_map_variant(v_position, 8.0);
-    } else if (red == 221) {
-        // sand
-        p.y += tex_map_offset(2.0);
-        p.x += tex_map_variant(v_position, 8.0);
-    } else if (red == 211) {
-        // soil
-        p.y += tex_map_offset(3.0);
-        p.x += tex_map_variant(v_position, 8.0);
-    } else if (red == 65) {
-        // grass
-        p.y += tex_map_offset(4.0);
-        p.x += tex_map_variant(v_position, 8.0);
-    } else if (red == 13) {
-        // leaf forest
-        p.y += tex_map_offset(5.0);
-        p.x += tex_map_variant(v_position, 8.0);
-    } else if (red == 23) {
-        // pine forest
-        p.y += tex_map_offset(6.0);
-        p.x += tex_map_variant(v_position, 8.0);
-    } else if (red == 226) {
-        // rock
-        p.y += tex_map_offset(7.0);
-        p.x += tex_map_variant(v_position, 8.0);
-    } else if (red == 210) {
-        // plowed soil
-        p.y += tex_map_offset(8.0);
-        p.x += tex_map_variant(v_position, 8.0);
-    } else if (red == 28 && blue == 0) {
-        // white stone floor
-        p.y += tex_map_offset(9.0);
-        p.x += tex_map_variant(v_position, 4.0);
-    } else if (red == 28 && blue == 1) {
-        // painter floor
-        p.y += tex_map_offset(10.0);
-        p.x += tex_map_variant(v_position, 4.0);
-    } else if (red == 28 && blue == 2) {
-        // wooden floor
-        p.y += tex_map_offset(11.0);
-        p.x += tex_map_variant(v_position, 4.0);
-    } else if (red == 28 && blue == 3) {
-        // imperial floor
-        p.y += tex_map_offset(12.0);
-        p.x += tex_map_variant(v_position, 4.0);
-    } else if (red == 28 && blue == 4) {
-        // brick floor
-        p.y += tex_map_offset(13.0);
-        p.x += tex_map_variant(v_position, 4.0);
-    } else if (red == 28 && blue == 5) {
-        // parquet floor
-        p.y += tex_map_offset(14.0);
-        p.x += tex_map_variant(v_position, 4.0);
-    } else if (red == 28 && blue == 6) {
-        // pavement floor
-        p.y += tex_map_offset(15.0);
-        p.x += tex_map_variant(v_position, 4.0);
-    } else if (red == 28 && blue == 7) {
-        // tile floor
-        p.y += tex_map_offset(16.0);
-        p.x += tex_map_variant(v_position, 4.0);
-    } else if (red == 28 && blue == 37) {
-        // stone tiles
-        p.y += tex_map_offset(17.0);
-        p.x += tex_map_variant(v_position, 4.0);
-    } else if (red == 119) {
-        // light stone tiles
-        p.y += tex_map_offset(18.0);
-        p.x += tex_map_variant(v_position, 4.0);
-    } else if (red == 192) {
-        // red stone tiles
-        p.y += tex_map_offset(19.0);
-        p.x += tex_map_variant(v_position, 4.0);
-    } else if (red == 17) {
-        // ground
-        p.y += tex_map_offset(20.0);
-        p.x += tex_map_variant(v_position, 8.0);
-    } else if (red == 0 && blue == 0) {
-        // solid ground
-        p.y += tex_map_offset(21.0);
-        p.x += tex_map_variant(v_position, 8.0);
-    } else if (red == 0 && blue == 1) {
-        // space
-        p.y += tex_map_offset(22.0);
-    } else {
-        // must not be here
-        gl_FragColor = biom;
-        return;
-    }
-    gl_FragColor = texture2D(u_texture, p);
+    ivec2 ibiom = biom_to_ibiom(biom);
+    gl_FragColor = texture2D(u_texture, ibiom_uv(v_position, vec2(0.0, 0.0), random_delta(v_position), ibiom));
 }

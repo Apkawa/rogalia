@@ -1,12 +1,10 @@
 {
   "name": "rogalia",
-  "version": "0.36.0",
+  "version": "0.37.0",
   "main": "index.html?steam=true",
   "description": "Rogalia sandbox mmorpg client",
   "scripts": {
-    "steam": "./node_modules/.bin/build --tasks win-x86,linux-x64,linux-x86,mac-x64 .",
-    "steam-dev": "./node_modules/.bin/build --linux --x64 .",
-    "steam-win": "./node_modules/.bin/build --win --x86 .",
+    "steam": "gulp nwbuild",
     "start": "node scripts/server.js",
     "build": "npm run load-metadata && npm run compile",
     "compile": "gulp",
@@ -22,18 +20,19 @@
   },
   "homepage": "http://rogalia.ru",
   "devDependencies": {
-    "babel-core": "^6.24.1",
-    "babel-plugin-transform-async-to-generator": "^6.24.1",
+    "babel-core": "^6.25.0",
     "babel-preset-es2015": "^6.24.1",
-    "express": "^4.15.2",
+    "express": "^4.15.3",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^6.1.2",
     "gulp-concat": "^2.6.1",
     "gulp-html-replace": "^1.6.2",
     "gulp-less": "^3.3.0",
+    "gulp-rename": "^1.2.2",
     "gulp-sourcemaps": "^2.6.0",
-    "gulp-uglify": "^2.1.2",
+    "gulp-uglify": "^3.0.0",
     "less": "^2.7.2",
-    "nw-builder": "^3.2.0",
-    "nwjs-builder-phoenix": "^1.14.0"
+    "nw-builder": "^3.4.1"
   },
   "chromium-args": "",
   "window": {
@@ -47,28 +46,5 @@
     "fullscreen": true,
     "min_width": 1280,
     "min_height": 720
-  },
-  "build": {
-    "files": [
-      "./package.json",
-      "./sources.json",
-      "./index.html",
-      "./main.less",
-      "./metadata.json",
-      "./color-picker.css",
-      "./dev-loader.js",
-      "./favicon.ico",
-      "./assets/**",
-      "./books/**",
-      "./news/**",
-      "./shop/**",
-      "./src/**",
-      "./lib/**"
-    ],
-    "packed": true,
-    "output": "./build",
-    "outputPattern": "./rogalia/${PLATFORM}-${ARCH}",
-    "nwFlavor": "normal",
-    "nwVersion": "0.22.3"
   }
 }

@@ -293,6 +293,16 @@ function Controller(game) {
         },
     };
 
+    this.highlightItemsGain = function(num) {
+        this.highlight("inventory", true);
+        const button = this.inventory.panel.button;
+        const tip = dom.wrap("inventory-tip", `+${num}`);
+        dom.append(button, tip);
+        tip.addEventListener("animationend", () => {
+            dom.remove(tip);
+        });
+    };
+
     this.highlight = function(name, enable) {
         if (!(name in this))
             return;
@@ -305,10 +315,6 @@ function Controller(game) {
             button.classList.add("alert");
         else
             button.classList.remove("alert");
-    };
-
-    this.makeHighlightCallback = function(buttonName, off) {
-        return this.highlight.bind(this, buttonName, off);
     };
 
     var lastTickUpdate = Date.now();
@@ -609,16 +615,18 @@ function Controller(game) {
         [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].forEach(function(key) {
             this.hotkeys[String(key).charCodeAt(0)] = {
                 allowedModifiers: ["ctrl", "alt"],
-                callback: function() {
+                callback: function(event) {
                     if (game.menu.visible)
                         game.menu.activate(key);
                     else if (key > 0 && key <= 5) {
-                        if (this.modifier.ctrl)
+                        event.preventDefault();
+                        if (this.modifier.ctrl) {
                             this.quickBars.ctrl.hotkey(key);
-                        else if (this.modifier.alt)
+                        } else if (this.modifier.alt) {
                             this.quickBars.alt.hotkey(key);
-                        else
+                        } else {
                             this.fight.hotkey(key);
+                        }
                     }
                 }
             };

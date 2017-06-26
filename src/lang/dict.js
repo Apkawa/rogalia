@@ -65,6 +65,7 @@ T.init = function(lang, callback) {
         "quests",
         "professions",
         "shop",
+        "achievements",
     ];
     let loaded = 0;
     scripts.forEach(function(script) {

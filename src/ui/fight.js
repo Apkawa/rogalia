@@ -42,13 +42,13 @@ function Fight() {
     }));
 
     function selectNextTarget(player = game.player) {
-        var p = new Point(game.controller.world.point).sub(player);
-        var sector = game.player.sector(Math.PI/4, p.x, p.y);
-        p = new Point(player);
-        var offset = new Point(CELL_SIZE, 0).rotate(2*Math.PI - sector * Math.PI/4);
-        p.add(offset);
+        const p = new Point(game.controller.world.point).sub(player);
+        const sector = game.player.sector(Math.PI/4, p.x, p.y);
+        const q = new Point(player);
+        const offset = new Point(CELL_SIZE, 0).rotate(2*Math.PI - sector * Math.PI/4);
+        p.fromPoint(q).add(offset);
 
-        player.selectNextTarget(p, null);
+        player.selectNextTarget(p, null, q);
     }
 
     let applyTimeout = null;

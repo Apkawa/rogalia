@@ -104,7 +104,7 @@ BinarySearchTree.prototype = {
                 current = current.right;
                 //if the new value is equal to the current one, insert to list
             } else {
-                game.sendErrorf("Duplicate in binary tree: %d", value.Id);
+                game.sendError(`Duplicate in binary tree: ${value.Id}`);
                 return;
             }
         }

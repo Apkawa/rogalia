@@ -1,36 +1,38 @@
 /* global util, dom, game, Container */
 
 "use strict";
-function ContainerSlot(container, index) {
-    this.container = container;
-    this.index = index;
+class ContainerSlot {
+    constructor(container, index) {
+        this.container = container;
+        this.index = index;
 
-    this.icon = null;
-    this.entity = null;
-    this.locked = false;
-    this.spriteVersion = "";
+        this.icon = null;
+        this.entity = null;
+        this.locked = false;
+        this.spriteVersion = "";
 
-    this.element = dom.slot();
-    this.element.maxWidth = Container.SLOT_SIZE + "px";
-    this.element.maxHeight = Container.SLOT_SIZE + "px";
-    this.element.containerSlot = this;
-    this.element.onmousedown = this.onmousedown.bind(this);
+        this.element = dom.slot();
+        this.element.maxWidth = Container.SLOT_SIZE + "px";
+        this.element.maxHeight = Container.SLOT_SIZE + "px";
+        this.element.containerSlot = this;
+        this.element.onmousedown = this.onmousedown.bind(this);
 
-    this.sup = null;
-    this.sub = null;
-    this.bar = null;
-    this.placeholder = null;
+        this.sup = null;
+        this.sub = null;
+        this.bar = null;
+        this.placeholder = null;
 
-    this._readonly = false;
-}
+        this._readonly = false;
+    }
 
-ContainerSlot.prototype = {
-    setTitle: function(title) {
+    setTitle(title) {
         this.element.title = title;
-    },
+    }
+
     get readonly() {
         return this._readonly;
-    },
+    }
+
     set readonly(value) {
         this._readonly = value;
         if (value) {
@@ -38,22 +40,27 @@ ContainerSlot.prototype = {
         } else {
             this.element.classList.remove("readonly");
         }
-    },
-    markAsUnseen: function() {
+    }
+
+    markAsUnseen() {
         this.element.classList.add("new");
-    },
-    markAsSeen: function() {
+    }
+
+    markAsSeen() {
         this.element.classList.remove("new");
-    },
-    lock: function() {
+    }
+
+    lock() {
         this.locked = true;
         this.element.classList.add("locked");
-    },
-    unlock: function(entity) {
+    }
+
+    unlock(entity) {
         this.locked = false;
         this.element.classList.remove("locked");
-    },
-    clear: function() {
+    }
+
+    clear() {
         this.entity = null;
         this.sub = null;
         this.sup = null;
@@ -64,8 +71,9 @@ ContainerSlot.prototype = {
         this.setTitle(this.placeholder && this.placeholder.title || "");
         this.markAsSeen();
         this.unlock();
-    },
-    set: function(entity) {
+    }
+
+    set(entity) {
         if (this.entity == entity && this.spriteVersion == entity.spriteVersion()) {
             this.update();
             return;
@@ -95,7 +103,8 @@ ContainerSlot.prototype = {
         dom.append(this.element, [icon, this.sup]);
 
         this.update();
-    },
+    }
+
     setPlaceholder(src, title = "") {
         if (this.placeholder == null) {
             this.placeholder = dom.img(src, "placeholder");
@@ -105,18 +114,21 @@ ContainerSlot.prototype = {
         } else {
             this.placeholder.src = src;
         }
-    },
-    setSup: function(text) {
+    }
+
+    setSup(text) {
         this.sup.textContent = text;
-    },
-    setSub: function(text) {
+    }
+
+    setSub(text) {
         if (this.sub == null) {
             this.sub = dom.tag("sub");
             dom.append(this.element, this.sub);
         }
         this.sub.textContent = text;
-    },
-    setBar: function(percent, cls) {
+    }
+
+    setBar(percent, cls) {
         if (this.bar == null) {
             this.bar = dom.wrap("bar", dom.div("bar-value"));
             dom.append(this.element, this.bar);
@@ -128,14 +140,16 @@ ContainerSlot.prototype = {
 
         this.setSub(util.toFixed(percent) + " %");
         this.sub.classList.add("sub-bar");
-    },
-    update: function() {
+    }
+
+    update() {
         this.updateProgress();
         this.updateCustom();
         this.updateRequirements();
         this.setTitle(this.entity.name);
-    },
-    updateProgress: function() {
+    }
+
+    updateProgress() {
         if (!this.entity)
             return;
         if ("Readiness" in this.entity) {
@@ -159,8 +173,9 @@ ContainerSlot.prototype = {
         if (diff < duration) {
             this.setBar(100*diff / duration, "progress");
         }
-    },
-    updateCustom: function() {
+    }
+
+    updateCustom() {
         if (this.entity.Group == "atom") {
             this.setSub(this.entity.Type);
         } else if ("Amount" in this.entity) {
@@ -171,16 +186,18 @@ ContainerSlot.prototype = {
         } else if (this.entity.isTool()) {
             this.setBar(this.entity.durabilityPercent());
         }
-    },
-    updateRequirements: function() {
+    }
+
+    updateRequirements() {
         if (this.entity.EffectiveParam) {
             if (this.entity.nonEffective())
                 this.element.classList.add("non-effective");
             else
                 this.element.classList.remove("non-effective");
         }
-    },
-    onmousedown: function(event) {
+    }
+
+    onmousedown(event) {
         if (this.locked)
             return;
 
@@ -228,12 +245,13 @@ ContainerSlot.prototype = {
         event.stopPropagation();
         this.lock();
         game.controller.cursor.set(entity, event.pageX, event.pageY, () => this.unlock());
-    },
+    }
+
     // TODO: this is ugly; fixme; used in "R - repeat"
-    click: function() {
+    click() {
         this.element.dispatchEvent(new MouseEvent("mousedown", {
             clientX: game.controller.mouse.x,
             clientY: game.controller.mouse.y,
         }));
-    },
+    }
 };

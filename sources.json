@@ -51,6 +51,7 @@
     "./src/ui/system.js",
     "./src/ui/fight.js",
     "./src/ui/jukebox.js",
+    "./src/ui/achievements.js",
     "./src/ui/slot-machine.js",
     "./src/controller.js",
     "./src/network.js",

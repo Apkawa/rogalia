@@ -6,6 +6,7 @@ T.dict = {
     "Wolf hungry": "Hungry wolf",
     "Wolf undead": "Undead wolf",
     "Wolf fatty": "Fat wolf",
+    "Wolf demonic": "Demonic wolf",
     "Furnace": "Smelter",
     "Liquid container": "Vessel",
     "Liquid container liftable": "Big vessel",

@@ -1,16 +1,14 @@
-/* global game */
+/* global game, CELL_SIZE, T */
 
 "use strict";
 function Stage() {}
 
 Stage.prototype = {
     name: "",
-    start: function(){},
-    end: function(){},
-    update: function(){},
-    draw: function(){},
-    sync: function(data) {},
-
+    end() {},
+    update() {},
+    draw() {},
+    sync(data) {},
 };
 
 Stage.makeEllipsisDrawer = function() {

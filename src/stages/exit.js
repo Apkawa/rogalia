@@ -3,13 +3,6 @@
 "use strict";
 function exitStage(message) {
     message = message || T("Refresh page...");
-    game.ctx.fillStyle = "#fff";
-    game.drawStrokedText(
-        T(message),
-        CELL_SIZE,
-        CELL_SIZE
-    );
-
     game.network.disconnect();
 
     var buttons = [
@@ -31,6 +24,16 @@ function exitStage(message) {
         .hideCloseButton()
         .show()
         .center(0.5, 0.05);
+
+    this.draw = function() {
+        game.ctx.fillStyle = "#fff";
+        game.drawStrokedText(
+            T(message),
+            CELL_SIZE,
+            CELL_SIZE
+        );
+
+    };
 };
 
 Stage.add(exitStage);

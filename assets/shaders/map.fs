@@ -11,46 +11,11 @@ uniform vec2 u_location;
 const float tile_size = 64.0;
 const float map_size = 4096.0; // 64 * 64
 
-const float map_tex_width = 512.0;
-const float map_tex_height = 1536.0;
-
-const ivec3 plowed_soil = ivec3(210, 0, 0);
-const ivec3 soil = ivec3(211, 0, 1);
-const ivec3 ground = ivec3(17, 0, 2);
-const ivec3 sand = ivec3(221, 0, 3);
-const ivec3 shallow_water = ivec3(36, 0, 4);
-const ivec3 deep_water = ivec3(32, 0, 5);
-const ivec3 rock = ivec3(226, 0, 6);
-const ivec3 grass = ivec3(65, 0, 7);
-const ivec3 leaf_forest = ivec3(13, 0, 8);
-const ivec3 pine_forest = ivec3(23, 0, 9);
-const ivec3 stone_tiles = ivec3(28, 37, 10);
-const ivec3 light_stone_tiles = ivec3(119, 0, 11);
-const ivec3 red_stone_tiles = ivec3(192, 0, 12);
-const ivec3 solid_ground = ivec3(0, 0, 13);
-
 const float transition_tile_size = 64.0;
 const float transitions_biom_width = transition_tile_size * 4.0;
 const float transitions_biom_height = transitions_biom_width + transition_tile_size;
 const float transitions_size = transitions_biom_width * 8.0;
 const float transitions_k = transition_tile_size / transitions_size;
-
-float tex_map_coord(float coord, float size) {
-    float fix = size / tile_size;
-    return ceil(mod(coord * map_size, tile_size))/(size + fix);
-}
-
-vec2 tex_map_point(vec2 pos) {
-    return vec2(tex_map_coord(pos.x, map_tex_width), tex_map_coord(pos.y, map_tex_height));
-}
-
-vec2 tex_map_point_in_tile(vec2 pos) {
-    vec2 p = tex_map_point(pos) * vec2(map_tex_width, map_tex_height);
-    p.x = mod(p.x, tile_size);
-    p.y = mod(p.y, tile_size);
-    return p;
-}
-
 
 vec4 neighbor_biom(vec2 pos, float dx, float dy) {
     pos.x += tile_size/map_size * dx;
@@ -420,7 +385,10 @@ vec4 transition_main_color(vec2 v_position, vec4 offset, vec2 delta) {
 }
 
 void main() {
-    vec2 p = tex_map_point_in_tile(v_position);
+    vec2 p = v_position * map_size;
+    p.x = mod(p.x, tile_size);
+    p.y = mod(p.y, tile_size);
+
     if (p.y < tile_size/2.0) {
         if (p.x < tile_size/2.0) {
             gl_FragColor = transition_main_color(v_position, vec4(-1.0, -1.0, -1.0, -1.0), vec2(0.5, 0.5));

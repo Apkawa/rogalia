@@ -1,3 +1,5 @@
+/* global localStorage */
+
 "use strict";
 
 class GameStorage {
