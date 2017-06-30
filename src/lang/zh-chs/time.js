@@ -12,14 +12,14 @@ T.time = function(time) {
 
     if (minutes) {
         txt = minutes + " ";
-        txt += num(minutes, ["минуту", "минуты", "минут"]);
+        txt += num(minutes, ["分钟", "分钟", "分钟"]);
     }
     var seconds = time % 60;
     if (seconds) {
         if (minutes)
             txt += " ";
         txt += seconds + " ";
-        txt += num(seconds, ["секунду", "секунды", "секунд"]);
+        txt += num(seconds, ["秒", "秒", "秒"]);
     }
     return txt;
 
