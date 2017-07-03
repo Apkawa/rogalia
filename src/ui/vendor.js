@@ -116,7 +116,7 @@ Vendor.sort = new function() {
             return self.byPrice(a, b);
     };
     this.byPrice = function(a, b) {
-        return b.Cost - b.Cost;
+        return a.Cost - b.Cost;
     };
 };
 

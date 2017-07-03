@@ -41,9 +41,9 @@ T.items = {
     "strengthening-potion": "如果你從墳墓里復活，只要喝下這藥水又是條好漢。",
     "daemon-essence": "惡魔心臟的精華，無論如何都不應該喝它！但是，它可以和其他的東西合成。",
     "strip-of-leather": "這條帶可用來把皮革件系在一起。",
-    "leather-chain": "這條皮革拼湊的鏈是有用的"。,
+    "leather-chain": "這條皮革拼湊的鏈是有用的。",
     "leather-necklace": "皮革項鏈。如果你感到無聊，你可以帶上，當然還需要皮鞭和紅酒，以及女王。皮革套裝的組件",
-    "big-leather-bag": "一個巨大的包，32格空間，松鼠黨最愛"。,
+    "big-leather-bag": "一個巨大的包，32格空間，松鼠黨最愛。",
     "happy-weed-stick": "術士的奇特發明。很奇怪，沒有人知道如何使用它。",
     "dryer": "一個有趣的機器，允許你干土為砂。在沼澤地區有用。",
     "iron-chain": "一個非常沉重的鏈。它用於製作盔甲。",
@@ -710,4 +710,3 @@ T.items = {
     "o-atomic-container": "64格空間的容器，只能放對應類型的原子。",
     "r-atomic-container": "64格空間的容器，只能放對應類型的原子。",
 };
-

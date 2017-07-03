@@ -1847,7 +1847,7 @@ T.dict = {
     "Wardrobe": "衣橱",
     "Closet": "壁橱",
     "Housing": "房屋",
-    "House": "家", 
+    "House": "家",
     "Accessory": "装饰",
     "Vessel": "容器",
     "On wall": "在墙上",
@@ -1976,7 +1976,7 @@ T.dict = {
     "Female head": "女性的头部",
     "Rogalian corpse": "Rogalian的尸体",
     "Iron fishing rod":"铁鱼竿",
-    "rude-fishing-rod": "粗糙的钓鱼竿"
+    "rude-fishing-rod": "粗糙的钓鱼竿",
     "Mushroom plant":"蘑菇菌床",
     "Only": "只有",
     "Deck": "Deck",
