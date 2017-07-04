@@ -575,7 +575,7 @@ T.dict = {
     "World picture": "世界图片",
     "Plastic ingot": "塑料锭",
     "Sturgeon": "鲟鱼",
-    "Gut": "胆",
+    "Gut": "屠宰",
     "Roasted catfish": "油炸鲶鱼",
     "Vendor license": "交易许可证",
     "Stake claim license": "领地许可证",
@@ -1720,7 +1720,7 @@ T.dict = {
     "Base armor": "基础盔甲",
     "Bleed": "流血",
 
-    "claim-help-text": "领地租金自动从你的银行账户扣除，在银行的实收租赁期限可以看看和支付费用，租赁期限一个周期三个月",
+    "claim-help-text": "领地租金自动从你的银行账户扣除，在银行的实收租赁期限可以看看和支付费用，租赁期限一个周期七天",
 
     "News": "新闻",
     "Second hand must be empty": "副手必须空着",
@@ -1747,7 +1747,7 @@ T.dict = {
     "Snooze": "打盹",
     "To equip": "装备",
     "Buy slot for {cost}?": "购买一个位置 {cost}?",
-    "Return home": "回家",
+    "Return home": "传送回家",
     "Small indulgence": "小免罪符",
     "Average indulgence": "中免罪符",
     "Big indulgence": "大免罪符",
