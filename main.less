@@ -2151,9 +2151,36 @@ meter:-moz-meter-sub-sub-optimum::-moz-meter-bar {
         .cursor-pointer;
         position: relative;
 
+        &.avatar-deleted {
+            filter: grayscale(100%);
+            opacity: 0.5;
+        }
+
+
         &:hover {
             filter: brightness(115%);
 
+            .delete {
+                opacity: 1;
+            }
+        }
+
+        .delete {
+            cursor: pointer;
+            transition: opacity 100ms ease-in-out;
+            opacity: 0;
+            position: absolute;
+            top: -15px;
+            right: -10px;
+            color: #fff;
+            background: rgba(150, 50, 50, 0.9);
+            font-size: 16px;
+            width: 18px;
+            height: 18px;
+            z-index: 1;
+            &:hover {
+                background: rgba(255, 50, 50, 0.9);
+            }
         }
 
         .avatar {

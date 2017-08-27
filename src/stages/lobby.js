@@ -1,4 +1,4 @@
-/* global game, util, Panel, dom, loader, Character, Stage, gameStorage */
+/* global game, util, Panel, dom, loader, Character, Stage, gameStorage, T */
 
 "use strict";
 function lobbyStage(data) {
@@ -18,37 +18,68 @@ function lobbyStage(data) {
 
     var avatars = dom.div("avatars");
 
-    function add({name, karma, avatar}, callback) {
+    function avatarContainer({name, karma, deleted, avatar}) {
         var nameElem = dom.wrap("avatar-name", (name == "+") ? T("Create") : name);
         if (karma < 0) {
             nameElem.className += " avatar-pk";
         }
 
-        dom.append(avatars, dom.wrap(
-            "avatar-container avatar-non-player",
+        return dom.wrap(
+            dom.className("avatar-container", "avatar-non-player", deleted && "avatar-deleted"),
             [
-                dom.wrap("avatar",  avatar),
+                dom.wrap("avatar", avatar),
                 nameElem,
+                !deleted && dom.wrap("delete", "×", {
+                    onclick: (event) => { event.stopPropagation(); del(name); },
+                }),
             ],
-            {onclick: callback}
-        ));
+            {
+                onclick: () => {
+                    if (deleted) {
+                        game.popup.confirm(T("Deletion will be canceled"), enter);
+                    } else {
+                        enter();
+                    }
+                },
+                title: (deleted)
+                    ? T("Will be deleted") + ": " + new Date(deleted * 1000).toLocaleString()
+                    : "",
+            }
+        );
+
+        function enter() {
+            game.playerName = name;
+            game.setStage("loading", lobbyStage.metadataVersion);
+        }
     }
 
-    characters.forEach(function(info) {
-        const avatar = Character.makeAvatar(Character.sex(info.Sex), info.Hairstyle);
-        add({name:  info.Name, karma: info.Karma, avatar}, function() {
-            game.playerName = info.Name;
-            game.setStage("loading", lobbyStage.metadataVersion);
+
+    function del(name) {
+        game.popup.confirm(T("Delete character (will take 1 day)?"), () => {
+            game.network.send("delete-character", {name}, (data) => game.setStage("lobby", data));
         });
-    });
+    }
+
+    dom.append(avatars, characters.map(info => avatarContainer({
+        name:  info.Name,
+        karma: info.Karma,
+        deleted: info.Deleted,
+        avatar: Character.makeAvatar(Character.sex(info.Sex), info.Hairstyle),
+    })));
 
     for (var i = maxChars - characters.length; i > 0; i--) {
+        dom.append(avatars, createContainer());
+    };
+
+    function createContainer() {
         var create = loader.loadImage("characters/avatars/new.png", true);
         create.className = "create";
-        add({name: T("Create"), avatar: create}, function() {
-            game.setStage("createCharacter");
-        });
-    };
+
+        return dom.wrap("avatar-container", [
+            dom.wrap("avatar", create),
+            dom.wrap("avatar-name", T("Create"))
+        ], {onclick: () => game.setStage("createCharacter")});
+    }
 
     var contents = [
         dom.wrap("lobby-account",  game.getLogin()),

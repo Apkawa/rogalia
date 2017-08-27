@@ -1,4 +1,4 @@
-/* global game, dom, Panel, T, sprintf, TS, util, fetch, fetch, config, Settings */
+/* global game, dom, Panel, T, sprintf, TS, util, fetch, fetch, config, Settings, Stage */
 
 "use strict";
 

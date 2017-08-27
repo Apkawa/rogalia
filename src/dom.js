@@ -340,6 +340,9 @@ var dom = {
         this.remove(element);
         to.appendChild(element);
     },
+    className: function(...list) {
+        return list.filter(cls => cls).join(" ");
+    },
     /* * * * * */
     forEach: function(selector, callback) {
         [].forEach.call(document.querySelectorAll(selector), function(elem) {
