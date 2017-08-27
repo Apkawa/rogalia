@@ -1,4 +1,4 @@
-/* global game, dom, Panel, T, sprintf, TS, util, fetch, fetch */
+/* global game, dom, Panel, T, sprintf, TS, util, fetch, fetch, config, Settings */
 
 "use strict";
 
@@ -36,9 +36,18 @@ function selectServerStage(panel) {
             self.panel = new Panel("select-server", "", [
                 dom.wrap("lobby-account", game.getLogin()),
                 serversTable(servers),
-                dom.button(T("EULA"), "eula", showEULA),
+                // dom.button(T("EULA"), "eula", showEULA),
                 dom.button(T("Refresh"), "refresh", showServers),
-                dom.button(T("Quit"), "quit", quit)
+                dom.button(T("Quit"), "quit", quit),
+                dom.make(
+                    "button",
+                    [
+                        dom.img("assets/icons/customization.png"),
+                        T("Settings")
+                    ],
+                    "settings",
+                    {onclick: settings}
+                ),
             ]).hideCloseButton().show().center(0.5, 0.05);
         };
         req.open("GET", game.gateway + "/status", true);
@@ -59,6 +68,31 @@ function selectServerStage(panel) {
             self.panel.close();
             game.setStage("login");
         }
+    }
+
+    function settings() {
+        new Panel("basic-settings", "Settings", [
+            dom.make("label", [
+                T("Language"),
+                dom.select(config.ui.language(), game.lang, "", function() {
+                    game.setLang(this.value);
+                }),
+            ]),
+            dom.hr(),
+            dom.make("p", T("Some graphic cards may fail with accelerated rendering. Disable to fix it.")),
+            dom.wrap("fix-rendering", [
+                dom.button(
+                    (config.graphics.gpuRender)
+                        ? T("Disable GPU rendering")
+                        : T("Enable GPU rendering"),
+                    "",
+                    () => {
+                        Settings.toggle("settings.graphics.gpuRender");
+                        game.reload();
+                    }
+                ),
+            ]),
+        ]).center().show();
     }
 
     function serversTable(servers) {

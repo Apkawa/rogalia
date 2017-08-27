@@ -17,10 +17,10 @@ var config = {
         obstacleAvoidance: () => game.player.Settings.ObstacleAvoidance,
     },
     ui: {
-        language: function(current) {
+        language: function(current = false) {
             return  (current)
                 ? game.lang
-                : ["en", "ru", "ja", "pt-br", "zh-cht", "zh-chs"];
+                : ["en", "ru", "ja", "pt-br", "ko", "zh-cht", "zh-chs"];
         },
         hp: true,
         name: true,

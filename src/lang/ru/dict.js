@@ -1945,4 +1945,7 @@ T.dict = {
     "Achievements": "Достижения",
     "Quests": "Квесты",
     "Update": "Обновить",
+    "Some graphic cards may fail with accelerated rendering. Disable to fix it.": "Некоторые видеокарты не работаю с ускорением. Отключите ускорение, чтобы исправить это.",
+    "Disable GPU rendering": "Выключить GPU",
+    "Enable GPU rendering": "Включить GPU",
 };

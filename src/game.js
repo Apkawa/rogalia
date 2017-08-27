@@ -404,6 +404,11 @@ class Game {
         this.stage.draw();
     }
 
+    setLang(lang) {
+        gameStorage.setItem("lang", lang);
+        this.reload();
+    }
+
     setStage(name, params) {
         document.body.classList.remove(this.stage.name + "-stage");
         this.stage.end();

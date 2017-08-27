@@ -29,8 +29,7 @@ function Settings() {
             game.controller.wasd.point.set(0, 0);
         },
         "settings.ui.language": function(lang) {
-            gameStorage.setItem("lang", lang);
-            game.reload();
+            game.setLang(lang);
         },
         "settings.sound.playMusic": function() {
             game.sound.toggleMusic();
@@ -166,12 +165,10 @@ Settings.prototype = {
                 tab.contents.push(label);
                 function makeLabel(key, value, title) {
                     if (_.isArray(value)) {
-                        var select = dom.select(value, game.lang);
-                        select.firstChild.onchange = function() {
+                        return dom.select(value, game.lang, "", function() {
                             group[prop] = this.value;
                             trigger();
-                        };
-                        return select;
+                        });
                     }
 
                     if (_.isNumber(value)) {
