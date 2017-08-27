@@ -624,13 +624,7 @@ Entity.prototype = {
         this.actionApplySimple("entity-destroy");
     },
     relocate: function() {
-        const ghost = new Entity(this.Type);
-        ghost.initSprite();
-        ghost.Id =  this.Id;
-        while (ghost.Orientation != this.Orientation) {
-            ghost.rotate(+1);
-        }
-        game.controller.creatingCursor(ghost, "relocate");
+        game.controller.clonedCreatingCursor(this, "relocate");
     },
     actionApplySimple: function(action) {
         if (this.isTool()) {

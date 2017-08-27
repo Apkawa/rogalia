@@ -1691,7 +1691,7 @@ class Character {
 
     liftStop() {
         if (this.burden) {
-            game.controller.creatingCursor(this.burden, "lift-stop");
+            game.controller.clonedCreatingCursor(this.burden, "lift-stop");
             game.controller.lastAction.set(null);
         }
     }

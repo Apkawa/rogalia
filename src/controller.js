@@ -865,6 +865,16 @@ function Controller(game) {
         return this.creatingCursor(entity, command, callback, cancel);
     };
 
+    this.clonedCreatingCursor = function(entity, command, callback, cancel) {
+        const ghost = new Entity(entity.Type);
+        ghost.initSprite();
+        ghost.Id =  entity.Id;
+        while (ghost.Orientation != entity.Orientation) {
+            ghost.rotate(+1);
+        }
+        game.controller.creatingCursor(ghost, command, callback, cancel);
+    };
+
     this.creatingCursor = function(entity, command = "entity-add", callback, cancel) {
         this.world.cursor = entity;
 
