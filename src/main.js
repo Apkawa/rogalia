@@ -18,13 +18,14 @@ function main() {
             return "ru";
         }
         const langs = config.ui.language();
-        const matchers = langs.map(lang => new RegExp(lang, "i"));
-        const lang = [
-            args["lang"],
-            gameStorage.getItem("lang"),
-            navigator.language,
-        ].find(input => matchers.some(matcher => matcher.test(input)));
-
+        const lang = langs.find(lang => {
+            const re = new RegExp(lang, "i");
+            return [
+                args["lang"],
+                gameStorage.getItem("lang"),
+                navigator.language,
+            ].some(input => re.test(input));
+        });
         return lang || langs[0];
     }
 
