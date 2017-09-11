@@ -418,7 +418,6 @@ Entity.prototype = {
             }
 
             switch (this.Group) {
-            case "rogalik-card":
             case "playing-card":
                 path = "cards/" + path.replace(/^card-/, "");
                 break;
@@ -1465,12 +1464,4 @@ Entity.prototype = {
             height
         );
     },
-    play: function() {
-        game.network.send("Play", {Id: this.Id}, ({PlayUrl, Cards}) => {
-            const url = encodeURI(PlayUrl + "&deck=" + JSON.stringify(Cards));
-            new Panel("play-rogalik", "Rogalik cards", [
-                dom.iframe(url)
-            ]).show();
-        });
-    }
 };
