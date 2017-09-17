@@ -783,6 +783,17 @@ hr {
         left: 0;
         top: 0;
     }
+
+    #lemons-icon {
+        position: absolute;
+        color: #ff0;
+        text-shadow: 0 0 1px #000;
+        top: -22px;
+        left: 12px;
+        width: 22px;
+        height: 16px;
+        background: url("assets/icons/lemons.png");
+    }
 }
 
 #system button, #links button {
@@ -2409,7 +2420,7 @@ ol li a:hover {
 
 .message.channel-system .body, .message.channel-server .body {
     color: #ccc;
-    white-space: pre;
+    white-space: pre-wrap;
 }
 
 #world-icons, #bg-state {
@@ -3746,6 +3757,15 @@ input[type=number], .lot-quantity > input, .price > input {
 }
 #ratings {
     max-width: none;
+
+    .rating {
+        height: 337px;
+        width: 250px;
+
+        .scrollable-contents {
+            padding: 0 2px;
+        }
+    }
 }
 .mail-body {
     width: 100%;
@@ -4172,6 +4192,10 @@ input[type=number], .lot-quantity > input, .price > input {
         }
     }
 
+    .shop-currency {
+        display: inline;
+    }
+
     .products {
 	height: 436px;
 	font: 12px/22px @default-font;
@@ -4252,6 +4276,10 @@ input[type=number], .lot-quantity > input, .price > input {
             margin-right: 5px;
             color: #b18d63;
             text-decoration: line-through;
+
+            .shop-currency-icon {
+                display: none;
+            }
         }
     }
 
