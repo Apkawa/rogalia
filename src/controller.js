@@ -1036,7 +1036,7 @@ function Controller(game) {
                             }
                             return this.world.hovered.defaultAction(true);
                         } else if (this.modifier.alt && game.player.IsAdmin) {
-                            game.network.send("teleport", {X: this.world.x, Y: this.world.y, Z: game.player.Z});
+                            game.chat.teleport(this.world.x, this.world.y, game.player.Z);
                         } else if(!this.world.cursor) {
                             game.player.onclick(this.world.x, this.world.y);
                         }

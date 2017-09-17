@@ -150,4 +150,9 @@ Effects.descriptions = {
         "effect": "Makes you invisible",
         "desc": "Reveals on any action",
     },
+    "Premium": {
+        "class": "good",
+        "effect": "Premium",
+        "desc": "Premium",
+    },
 };

@@ -1,10 +1,13 @@
-/* global dom, game, TS, Panel, T */
+/* global _, dom, game, TS, Panel, T, util, Barbershop */
 
 "use strict";
 
 function Shop() {
     var self = this;
-    var currency = (cost) => "$" + util.toFixed(cost, 2);
+    const currency = (cost) => dom.wrap("shop-currency", [
+        dom.img("assets/icons/lemons.png", "shop-currency-icon"),
+        util.toFixed(cost, 2)
+    ]);
 
     this.tabs = null;
 
@@ -12,11 +15,6 @@ function Shop() {
 
     var loaded = false;
     var onload = function(){};
-
-    // TODO: remove me;
-    // clear old data
-    gameStorage.removeItem("panels.shop");
-    playerStorage.removeItem("panels.shop");
 
     this.panel = new Panel("shop", "Shop", [], {
         show: function() {
@@ -45,6 +43,23 @@ function Shop() {
             dom.hr(),
             dom.iframe(data.Url),
         ]).show();
+    };
+
+    let lemons = undefined;
+    this.update = function() {
+        if (game.player.Lemons !== lemons) {
+            lemons = game.player.Lemons;
+            this.setLemons(lemons);
+       }
+    };
+
+    let lemonsIcon = null;
+    this.setLemons = function(lemons) {
+        if (!lemonsIcon) {
+            lemonsIcon = dom.wrap("#lemons-icon");
+            this.panel.button.appendChild(lemonsIcon);
+        }
+        lemonsIcon.textContent = lemons;
     };
 
     this.search = function(pattern) {

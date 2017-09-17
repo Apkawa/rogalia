@@ -120,10 +120,10 @@ function Chat() {
             actions.push("---");
             actions.push({
                 teleport: function() {
-                    game.network.send("teleport", {name: name});
+                    game.chat.send(`*teleport ${name}`);
                 },
                 summon: function() {
-                    game.network.send("summon", {name: name});
+                    game.chat.send(`*summon ${name}`);
                 }
             });
         }
@@ -145,7 +145,7 @@ function Chat() {
         switch (e.button) {
         case game.controller.LMB:
             if (game.player.IsAdmin && e.altKey) {
-                game.network.send('teleport', {name: name});
+                game.chat.send(`*teleport ${name}`);
                 return true;
             }
 
@@ -312,7 +312,8 @@ function Chat() {
             var arg = match[2];
             switch (cmd) {
             case "where":
-                self.addMessage(sprintf("%d %d %d", game.player.X, game.player.Y, game.player.Z));
+                const {X, Y, Z} = game.player;
+                self.addMessage(`${X} ${Y} ${Z}`);
                 break;
             case "list-channels":
                 this.listChannels();
@@ -321,10 +322,10 @@ function Chat() {
                 self.setCustomChannel(arg);
                 break;
             case "lvl-down":
-                self.send(sprintf("*teleport %d %d %d", game.player.X, game.player.Y, game.player.Z + 1));
+                self.teleport(game.player.X, game.player.Y, game.player.Z + 1);
                 break;
             case "lvl-up":
-                self.send(sprintf("*teleport %d %d %d", game.player.X, game.player.Y, game.player.Z - 1));
+                self.teleport(game.player.X, game.player.Y, game.player.Z - 1);
                 break;
             case "help":
                 self.addMessage("global: 0, local: 1");
@@ -1050,5 +1051,9 @@ function Chat() {
                 Channel: channels.custom,
             });
         });
+    };
+
+    this.teleport = function(x, y, z) {
+        return this.send(`*teleport ${x} ${y} ${z}`);
     };
 }

@@ -150,13 +150,17 @@ Quest.prototype = {
                 const built = progress.Built || [];
                 return goal.Build && dom.wrap("quest-build", [
                     T("To build") + ": ",
-                    dom.wrap("", goal.Build.map((build, i) => {
-                        const done = (built[i]) ? " quest-ok" : "";
-                        return dom.wrap("quest-build-item" + done, [
-                            built[i] && dom.wrap("quest-ok-mark", "✔"), ,
-                            game.controller.craft.makeLink(build),
-                        ]);
-                    }))
+                    dom.wrap("quest-items-container", [
+                        dom.wrap("", goal.Build.map((build, i) => {
+                            const done = (built[i]) ? " quest-ok" : "";
+                            console.log(build);
+                            return dom.wrap("quest-build-item" + done, [
+                                built[i] && dom.wrap("quest-ok-mark", "✔"), ,
+                                game.controller.craft.makeLink(build),
+                            ]);
+                        })),
+                        self.makeSlots(goal.Build),
+                    ]),
                 ]);
             }
 

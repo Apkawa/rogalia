@@ -250,6 +250,7 @@ class Game {
     }
 
     initAnalitics(userId) {
+        return;
         ga.GameAnalytics.configureBuild("rogalia 0.31.0");
         ga.GameAnalytics.configureUserId(userId);
         ga.GameAnalytics.initialize(

@@ -26,11 +26,11 @@ function Skills() {
 }
 
 Skills.byAttr = {
-    strength: ["Carpentry", "Metalworking", "Leatherworking"],
+    strength: ["Carpentry", "Metalworking"],
     vitality: ["Stoneworking", "Mining", "Lumberjacking"],
-    dexterity: ["Pottery", "Tailoring", "Swordsmanship"],
-    intellect: ["Mechanics", "Alchemy"],
-    perception: ["Survival", "Farming", "Fishing"],
+    dexterity: ["Pottery", "Swordsmanship", "Fishing"],
+    intellect: ["Mechanics", "Alchemy", "Tailoring"],
+    perception: ["Survival", "Farming", "Leatherworking"],
     wisdom: ["Herbalism", "Cooking", "Leadership"],
 };
 

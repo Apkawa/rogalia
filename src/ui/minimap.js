@@ -118,7 +118,7 @@ function Minimap() {
     this.mapImage.onclick = (e) => {
         if (game.controller.modifier.alt && game.player.IsAdmin) {
             const p = pointFromEvent(e).mul(CELL_SIZE);
-            game.network.send("teleport", {X: p.x, Y: p.y, Z: this.lvl});
+            game.chat.teleport(p.x, p.y, this.lvl);
             return;
         }
         var p = pointFromEvent(e);

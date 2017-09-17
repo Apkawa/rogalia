@@ -39,6 +39,12 @@ class Effects {
         } else {
             delete pl.Effects["NewbieProtection"];
         }
+
+        if (pl.PremiumTill > Date.now() / 1000) {
+            pl.Effects["Premium"] = {Duration: 0};
+        } else {
+            delete pl.Effects["Premium"];
+        }
     }
 
     upsert(name, data) {

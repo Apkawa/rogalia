@@ -33,6 +33,7 @@ function mainStage(data) {
         game.controller.craft.update();
         if (data.Players && game.player.Id in data.Players) {
             game.controller.stats.sync(data.Players[game.player.Id]);
+            game.controller.shop.update();
         }
     };
 
