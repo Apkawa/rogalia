@@ -89,10 +89,10 @@ Sprite.prototype = {
         game.ctx.globalAlpha = 1;
     },
     draw: function(p) {
-        if (this.image.width == 0 || this.frame * this.width + this.width > this.image.width) {
+        //  || this.frame * this.width + this.width > this.image.width
+        if (this.width == 0 || this.image.width == 0) {
             return;
         }
-        // try {
         game.ctx.drawImage(
             this.image,
             this.frame * this.width,
@@ -104,15 +104,6 @@ Sprite.prototype = {
             this.width,
             this.height
         );
-        // } catch(e) {
-        //     console.log(
-        //         this,
-        //         this.frame * this.width,
-        //         this.position * this.height,
-        //         p.x,
-        //         p.y
-        //     );
-        // }
     },
     drawOutline: function(p) {
         if (!this.outline)
