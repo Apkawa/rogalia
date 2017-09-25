@@ -50,15 +50,21 @@ Effects.descriptions = {
     },
     "MushroomTrip": {
         "class": "",
-        "effect": "Increases movement by 35, revokes hallucinations, causes 10% health loss in a tick.",
+        "effect": "Increases movement speed by 35%, revokes hallucinations, causes 10% health loss in a tick.",
         "desc": "Gained when character is having raw mushrooms.",
         "note": "Damage growth rateably to eaten mushrooms amount.",
     },
+    "MushroomJoy": {
+        "class": "good",
+        "effect": "Increases movement speed by 20%.",
+        "desc": "Gained from mushrooms products .",
+        "note": "",
+    },
     "Sex": {
         "class": "good",
-        "effect": "Spell causes fullness decrease by 20, stamina increase by 50.",
+        "effect": "Causes fullness decrease by 20, stamina increase by 50.",
         "desc": "Buy from Margo.",
-        "note": "Spell length is 1.5 minutes.",
+        "note": "Duration is 1.5 minutes.",
     },
     "Arena": {
         "class": "",

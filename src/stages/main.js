@@ -141,10 +141,11 @@ function mainStage(data) {
 
     var hueRotate = 0;
     this.drawGlobalEffects = function() {
-        if ("MushroomTrip" in game.player.Effects || "BadTrip" in game.player.Effects) {
+        const pl = game.player;
+        if ("MushroomTrip" in pl.Effects || "BadTrip" in pl.Effects) {
             game.canvasContainer.style.filter = "hue-rotate(" + (hueRotate % 360) +"deg)";
             hueRotate += 20;
-        } else if (game.player.Instance == "sanctuary") {
+        } else if (pl.dead || pl.Instance == "sanctuary") {
             game.canvasContainer.style.filter = "grayscale(100%)";
         } else {
             game.canvasContainer.style.filter = "";

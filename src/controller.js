@@ -1468,6 +1468,50 @@ function Controller(game) {
         }
     };
 
+    this.updateDeathDialog = function(player) {
+        let panel = game.panels["death"];
+        if (player.dead) {
+            if (panel) {
+                return;
+            }
+        } else {
+            if (panel) {
+                panel.close();
+            }
+            return;
+        }
+
+        const revive = () => {
+            game.network.send("revive");
+            panel.close();
+        };
+
+        const fmtTime = (tm) => new Date(tm).toTimeString().substring(3, 8);
+        const reviveTime = 3 * 60 * 1000;
+        let end = Date.now() + reviveTime;
+        const timer = dom.wrap("death-revive-timer", fmtTime(reviveTime));
+        const interval = setInterval(() => {
+            const left = end - Date.now();
+            if (left <= 0) {
+                revive();
+            }
+            timer.textContent = fmtTime(left);
+        }, 1000);
+
+        panel = new Panel(
+            "death",
+            "Death",
+            [
+                T("You are dead"),
+                timer,
+                dom.button(T("Revive"), "", revive),
+            ],
+            {
+                close: () => clearInterval(interval),
+            }
+        ).hideCloseButton().setTemporary(true).center().show();
+    };
+
     this.iterateContainers = function(callback) {
         var checked = {};
         var bag = Container.bag();

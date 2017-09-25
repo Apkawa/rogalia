@@ -134,6 +134,10 @@ class Character {
         this.name = name;
     }
 
+    get dead() {
+        return this.Hp.Current <= 0;
+    }
+
     leftTopX() {
         return (this.X - this.Width / 2) << 0;
     }
@@ -260,6 +264,7 @@ class Character {
                     game.controller.minimap.update();
                 }
             }
+            game.controller.updateDeathDialog(this);
         }
     }
 
@@ -633,7 +638,7 @@ class Character {
     }
 
     setDst(x, y) {
-        if (this.Speed <= 0 || this.Disabled) {
+        if (this.Speed <= 0 || this.Disabled || this.dead) {
             return;
         }
         var leftBorder, rightBorder, topBorder, bottomBorder;
@@ -696,7 +701,7 @@ class Character {
     }
 
     draw(force) {
-        if ("Sleeping" in this.Effects || (this.mount && !force)) {
+        if ("Sleeping" in this.Effects || (this.mount && !force) || this.dead) {
             return;
         }
 

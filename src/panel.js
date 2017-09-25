@@ -49,7 +49,7 @@ function Panel(name, title, elements, hooks) {
     this.hooks = {
         show: hooks.show,
         hide: hooks.hide,
-        clsoe: hooks.close,
+        close: hooks.close,
     };
 
     if (elements) {

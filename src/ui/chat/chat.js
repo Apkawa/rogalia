@@ -179,6 +179,10 @@ function Chat() {
 
         if (e.target.classList.contains("marker-link")) {
             var [x, y, z, ...title] = e.target.dataset.marker.split(" ");
+            if (e.ctrlKey && game.player.IsAdmin) {
+                self.teleport(x * CELL_SIZE, y * CELL_SIZE, z);
+                return true;
+            }
             game.controller.minimap.addMarker(x, y, z, title.join(" "));
             game.controller.minimap.selectLevel(z);
             game.controller.minimap.focusOn(x * CELL_SIZE, y * CELL_SIZE);
