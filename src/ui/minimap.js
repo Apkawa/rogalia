@@ -204,14 +204,7 @@ function Minimap() {
     };
 
     function saveMarkers() {
-        var markers = _.map(self.markers, function(point) {
-            return {
-                x: point.x,
-                y: point.y,
-                z: point.z,
-                title: point.title,
-            };
-        });
+        var markers = _.map(self.markers, ({x, y, z, title}) => ({x, y, z, title}));
         gameStorage.setItem("map.markers", markers);
     };
 
@@ -262,6 +255,7 @@ function Minimap() {
         dom.remove(self.points[name]);
         delete self.points[name];
         delete self.markers[name];
+        saveMarkers();
     };
 
     function sendPoint(point) {
