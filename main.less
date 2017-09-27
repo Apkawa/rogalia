@@ -24,6 +24,7 @@
 @dark-color: #292b2f;
 @bg-color: #3f4244;
 @top-panel-border-color: #bb8247;
+@currency-color: #ecc423;
 
 @outline-color: #212d2f;
 @bg-transparent-color: rgba(38, 41, 44, 0.8);
@@ -770,7 +771,7 @@ hr {
 
 #shop-button {
     position: absolute;
-    top: -48px;
+    bottom: -10px;
     height: 28px;
     border-color: #069e8a;
 
@@ -786,13 +787,15 @@ hr {
 
     #lemons-icon {
         position: absolute;
-        color: #ff0;
+        color: @currency-color;
         text-shadow: 0 0 1px #000;
-        top: -22px;
-        left: 12px;
-        width: 22px;
-        height: 16px;
-        background: url("assets/icons/lemons.png");
+        bottom: -22px;
+        right: 0;
+        min-width: 100%;
+        text-align: left;
+        padding-left: 20px;
+        background: url("assets/icons/lemon.png") left center no-repeat;
+        .bg-transparent;
     }
 }
 
@@ -4194,6 +4197,8 @@ input[type=number], .lot-quantity > input, .price > input {
 
     .shop-currency {
         display: inline;
+        display: flex;
+        align-items: center;
     }
 
     .products {
@@ -4269,7 +4274,11 @@ input[type=number], .lot-quantity > input, .price > input {
     }
 
     .product-cost {
-	color: @button-color;
+	color: @currency-color;
+
+        .shop-currency-icon {
+            padding-right: 5px;
+        }
 
         .product-original-cost {
             display: inline-block;
@@ -4372,6 +4381,14 @@ input[type=number], .lot-quantity > input, .price > input {
 
     .title-preview-result {
 	margin: 4px;
+    }
+
+    #lemons-tab {
+        width: 45px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0;
     }
 }
 
