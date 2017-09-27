@@ -1,4 +1,4 @@
-/* global loader, game */
+/* global loader, game, dom */
 
 "use strict";
 function Sprite(path = null, width = 0, height = 0, speed = 0) {
@@ -32,6 +32,8 @@ function Sprite(path = null, width = 0, height = 0, speed = 0) {
         this.load(path);
     }
 }
+
+Sprite.outlineCache = new WeakMap();
 
 Sprite.prototype = {
     set onload(callback) {
@@ -69,19 +71,31 @@ Sprite.prototype = {
         if (!this.image.width)
             return;
 
-        var w = this.image.width;
-        var h = this.image.height;
-        var canvas = dom.canvas(w, h);
-        var ctx = canvas.ctx;
+        const cached = Sprite.outlineCache.get(this.image);
+        if (cached) {
+            this.outline = cached.canvas;
+            this.imageData = cached.imageData;
+            return;
+        }
+        const w = this.image.width;
+        const h = this.image.height;
+        const canvas = dom.canvas(w, h);
+        const ctx = canvas.ctx;
 
         ctx.drawImage(this.image, 0, 0);
-        this.imageData = ctx.getImageData(0, 0, w, h);
+        const imageData = ctx.getImageData(0, 0, w, h);
 
         ctx.globalCompositeOperation = "source-atop";
         ctx.fillStyle = "#fff";
         ctx.fillRect(0, 0, w, h);
 
+        this.imageData = imageData;
         this.outline = canvas;
+
+        Sprite.outlineCache.set(this.image, {
+            imageData,
+            canvas,
+        });
     },
     drawAlpha: function(p, alpha) {
         game.ctx.globalAlpha = alpha;
@@ -106,8 +120,9 @@ Sprite.prototype = {
         );
     },
     drawOutline: function(p) {
-        if (!this.outline)
+        if (!this.outline) {
             return;
+        }
         game.ctx.globalAlpha = 0.25;
         var w = this.width;
         var h = this.height;
