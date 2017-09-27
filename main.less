@@ -2094,6 +2094,11 @@ meter:-moz-meter-sub-sub-optimum::-moz-meter-bar {
                 color: #c7cace;
                 margin: 0;
             }
+
+            .armor {
+                .cursor-help;
+            }
+
             .param.negative .value {
                 color: #d61414;
             }
@@ -4415,16 +4420,22 @@ input[type=number], .lot-quantity > input, .price > input {
 	display: block;
     }
 
-    img {
-	opacity: 0.5;
-    }
-
-    .selected {
-	opacity: 1;
-    }
-
     .methods {
-	margin: 5px 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        .payment-option {
+            margin: 5px 0;
+            transition: all 150ms ease-in;
+            opacity: 0.5;
+
+            &.selected {
+                opacity: 1;
+                box-shadow: 0 0 3px #0ff;
+            }
+        }
     }
 
     button {

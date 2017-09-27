@@ -104,7 +104,7 @@ class Stats {
             value("Addiction"),
             dom.hr(),
             this.makeDamage(player),
-            value("Armor"),
+            this.makeArmor(player),
             value("Defence"),
             value("Accuracy"),
             value("Speed"),
@@ -113,6 +113,15 @@ class Stats {
 
     makeDamage(player) {
         return ParamBar.makeValue("Damage", this.calcDamage(player));
+    }
+
+    makeArmor(player) {
+        const base = Math.round(player.Armor / (1 + player.Lvl*0.002));
+        const additional = player.Armor - base;
+        const armor = ParamBar.makeValue("Armor", player.Armor);
+        armor.classList.add("armor");
+        armor.title = `${base} + ${(additional)}`;
+        return armor;
     }
 
     calcDamage(player) {
@@ -127,10 +136,10 @@ class Stats {
 
         const ranged = detectRanged(left, right);
         if (ranged) {
-            return ranged.damage();
+            return ranged.rawDamage(true);
         }
 
-        const [main, secondary] = detectMelee(left, right).map(weapon => weapon.damage());
+        const [main, secondary] = detectMelee(left, right).map(weapon => weapon.rawDamage(true));
         const lvl = player.Lvl;
         const joy = player.Effects.MushroomJoy;
         const mushroom = (joy) ? joy.BonusDamage : 1;
@@ -139,7 +148,7 @@ class Stats {
         return (main + secondary*0.2)*(2 - (str-100))*(1+(0.2 * lvl/100))*mushroom/alcohol;
 
         function detectMelee(left, right) {
-            const empty = {damage: () => 0};
+            const empty = {rawDamage: () => 0};
             if (left && left.Range) {
                 left = null;
             }

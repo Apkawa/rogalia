@@ -101,7 +101,7 @@ Entity.prototype = {
         }
 
         if ("Damage" in this)
-            name += "\n" + T("Damage") + ": " + util.toFixed(this.damage(), 0);
+            name += "\n" + T("Damage") + ": " + util.toFixed(this.rawDamage(), 0);
         else if (this.Props.Energy)
             name += "\n" + T("Energy") + ": " + this.Props.Energy;
 
@@ -211,11 +211,7 @@ Entity.prototype = {
             if ("Armor" in this) {
                 elements.push(dom.wrap("param", [T("Armor"), dom.wrap("value", this.armor())]));
             } else if ("Damage" in this) {
-                const dmg = util.toFixed(this.rawDamage(), 0);
-                const damage = this.nonEffective()
-                      ? util.toFixed(game.player.Skills.Swordsmanship.Value.Current) + " / " + dmg
-                      : dmg;
-                elements.push(dom.wrap("param", [T("Damage"), dom.wrap("value", damage)]));
+                elements.push(dom.wrap("param", [T("Damage"), dom.wrap("value", this.damage())]));
                 if (this.Ammo) {
                     elements.push(dom.wrap("param", [T("Ammo"), dom.wrap("value", T(this.Ammo.Type))]));
                 }
@@ -274,19 +270,30 @@ Entity.prototype = {
         return false;
     },
     armor: function() {
-        var armor = util.toFixed(this.Armor * (1 + this.Quality / 100), 0);
-        if (this.nonEffective())
+        const base = this.Armor * (1 + this.Quality / 100);
+        const k = Entity.durabilityPenalty(this.Durability);
+        var armor = util.toFixed(base * k, 0);
+        if (this.nonEffective()) {
             return "0 / " + armor;
-
-        return armor;
+        }
+        return (k == 1)
+            ? armor
+            : armor + " / " + util.toFixed(base, 0);
     },
-    rawDamage: function() {
-        return this.Damage * (Math.pow(this.Quality, 1.5) / 3333 + 1);
+    rawDamage: function(withDurability = false) {
+        const k = (withDurability) ? Entity.durabilityPenalty(this) : 1;
+        return this.Damage * (Math.pow(this.Quality, 1.5) / 3333 + 1) * k;
     },
     damage: function() {
-        return (this.nonEffective())
-            ? 0
-            : this.rawDamage();
+        const base = this.rawDamage();
+        const k = Entity.durabilityPenalty(this.Durability);
+        const damage = util.toFixed(base * k, 0);
+        if ((this.nonEffective())) {
+            return util.toFixed(game.player.Skills.Swordsmanship.Value.Current) + " / " + damage;
+        }
+        return (k == 1)
+            ? damage
+            : damage + " / " + util.toFixed(base, 0);
     },
     makeDescription: function() {
         var text = T.items[this.Type] || T.items[this.Group] || T("No description yet");

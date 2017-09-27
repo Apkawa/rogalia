@@ -238,3 +238,11 @@ Entity.containerSize = function(entity) {
 Entity.books = {
     $intro: "Именем Императора и Его Синода",
 };
+
+Entity.durabilityPenalty = ({Current, Max}) => {
+    if (Current == Max) {
+        return 1;
+    }
+    const percent = (Max - Current) / Max;
+    return 1 - Math.ceil(percent*10)/10;
+};
