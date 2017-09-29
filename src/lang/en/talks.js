@@ -215,6 +215,7 @@ Talks.npcs = {
         },
         "actions": {
             "Trade": "I wanna see your goods.",
+            "Repair": "I want to repair my stuff",
         },
     },
     "boris": {

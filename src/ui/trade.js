@@ -2,9 +2,6 @@
 
 "use strict";
 
-class TradeSlot extends ContainerSlot {
-}
-
 class Trade {
     init(partner, {MyContainer, PartnerContainer}) {
         this.partner = partner;

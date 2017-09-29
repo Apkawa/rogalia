@@ -1,4 +1,4 @@
-/* global Bank, Exchange, game, dom, Vendor, T, Character, Panel, TS, util, Quest, ImageFilter */
+/* global Bank, Repair, Exchange, game, dom, Vendor, T, Character, Panel, TS, util, Quest, ImageFilter */
 
 "use strict";
 Character.equipSlots =  [
@@ -170,7 +170,10 @@ Character.npcActions = {
     "Bank": function() {
         new Bank(this);
     },
-    "Exchange": function() {
+    "Repair": function() {
+        new Repair(this);
+    },
+    "Exchange"() {
         new Exchange(this);
     },
     "Quest": function() {

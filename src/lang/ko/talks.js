@@ -215,6 +215,7 @@ Talks.npcs = {
         },
         "actions": {
             "Trade": "그 쪽의 물건을 보고 싶군요.",
+            "Repair": "I want to repair my stuff",
         },
     },
     "boris": {

@@ -2032,7 +2032,7 @@ class Character {
             // TODO: merge with stats.js
             const slots = data.Equip.reduce(function(slots, item, i) {
                 var name = Character.equipSlots[i];
-                var slot = new ContainerSlot({panel: panel, entity: {}, inspect: true}, i);
+                var slot = new ContainerSlot({panel, entity: {}, inspect: true}, i);
                 if (item) {
                     var entity = new Entity(item.Type);
                     entity.sync(item);

@@ -116,6 +116,7 @@ class Stats {
     }
 
     makeArmor(player) {
+        this.fields.add("Armor");
         const base = Math.round(player.Armor / (1 + player.Lvl*0.002));
         const additional = player.Armor - base;
         const armor = ParamBar.makeValue("Armor", player.Armor);

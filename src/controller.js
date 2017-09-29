@@ -762,7 +762,6 @@ function Controller(game) {
         this.fpsStats = this.system.fps;
         this.inventory = {panel: {}};
 
-        this.createButton(this.shop.panel, "shop");
         this.createButton(this.stats.panel, "stats");
         this.createButton(this.inventory.panel, "inventory");
         this.createButton(this.skills.panel, "skills");
@@ -773,6 +772,7 @@ function Controller(game) {
         this.createButton(this.users.panel, "social");
         this.createButton(this.system.panel, "system");
         this.createButton(this.help.panel, "help");
+        this.createButton(this.shop.panel, "shop");
 
         this.inventory.panel.button.onclick = this.toggleBag;
 
