@@ -1,13 +1,19 @@
-/* global _, dom, game, TS, Panel, T, util, Barbershop */
+/* global _, dom, game, TS, Panel, T, util, Barbershop, TT */
 
 "use strict";
 
 function Shop() {
     var self = this;
-    const currency = (cost) => dom.wrap("shop-currency", [
-        dom.img("assets/icons/lemons.png", "shop-currency-icon"),
-        util.toFixed(cost, 2)
-    ]);
+    const currency = ({Cost, Discount, Tag}, discount = false) => {
+        const cost = (discount)
+              ? Cost * (100 - Discount)/100
+              : Cost;
+        const bucks = Tag == "lemons";
+        return dom.wrap("shop-currency", [
+            (bucks) ? "$" : dom.img(`assets/icons/lemon.png`, "shop-currency-icon"),
+            util.toFixed(cost, 2)
+        ]);
+    };
 
     this.tabs = null;
 
@@ -87,6 +93,13 @@ function Shop() {
                 {
                     title: T("Items"),
                 },
+                {
+                    title: "",
+                    init: (title, contents) => {
+                        title.id = "lemons-tab";
+                        dom.append(title, dom.img("assets/icons/lemon.png"));
+                    }
+                },
             ];
 
             var groups = _.map(_.groupBy(data.Products, ".Group"), function(products) {
@@ -101,14 +114,13 @@ function Shop() {
                         tag = product.Tag;
                         contents.push(dom.wrap("product-tag", TS(tag)));
                     }
-                    const totalCost = product.Cost * (100 - product.Discount)/100;
                     var card = dom.wrap("product-card product-card-" + tag, [
                         product.Discount && dom.wrap("product-discount", `-${product.Discount}%`),
                         dom.wrap("product-info", [
                             productName(product),
                             dom.wrap("product-cost", [
-                                product.Discount && dom.wrap("product-original-cost", currency(product.Cost)),
-                                currency(totalCost)
+                                product.Discount && dom.wrap("product-original-cost", currency(product)),
+                                currency(product, true)
                             ]),
                         ]),
                     ]);
@@ -127,13 +139,23 @@ function Shop() {
         });
     }
 
+    function sendOrder(product, callback) {
+        game.network.send("shop", {
+            Product: product.Name,
+            Data: product.data,
+            Order: product.order,
+        }, callback);
+    }
+
     function openCard(product) {
-        buyButton = dom.button(T("Buy"), "product-buy", function() {
-            game.network.send("shop", { Product: product.Name, Data: product.data });
-            // function(data) {
-            //     pay(product, data.Order);
-            // }
-            return false;
+        buyButton = dom.button(T("Buy"), "product-buy", () => {
+            if (product.Tag == "lemons") {
+                sendOrder(product); // , (data) => pay(product, data.Order)
+                return;
+            }
+            game.popup.confirm(TT("Pay {lemons}?", {lemons: product.Cost}), () => {
+                sendOrder(product);
+            });
         });
         const help = dom.link("#", Shop.descriptions["how-to"], "product-help");
         help.onclick = function(event) {
@@ -142,13 +164,12 @@ function Shop() {
             return false;
         };
         const desc = Shop.descriptions[product.Tag];
-        const totalCost = product.Cost * (100 - product.Discount)/100;
         self.panel.setContents([
             dom.wrap("product-name", productName(product)),
             dom.hr(),
             dom.wrap("product-cost big", [
-                product.Discount && dom.wrap("product-original-cost", currency(product.Cost)),
-                currency(totalCost)
+                product.Discount && dom.wrap("product-original-cost", currency(product)),
+                currency(product, true)
             ]),
             dom.wrap("product-buy-container", [
                 buyButton,
@@ -175,23 +196,38 @@ function Shop() {
     }
 
     function pay(product, order) {
-        var paymentType = param("paymentType", "AC");
+        const paymentType = param("paymentType", "AC");
 
-        var card = dom.img("assets/shop/payment-card.png", "selected");
-        card.title = T("Card");
-        card.onclick = function() {
-            yandex.classList.remove("selected");
-            card.classList.add("selected");
-            paymentType.value = "AC";
-        };
-
-        var yandex = dom.img("assets/shop/payment-yandex.png");
-        yandex.title = T("Yandex");
-        yandex.onclick = function() {
-            card.classList.remove("selected");
-            yandex.classList.add("selected");
-            paymentType.value = "PC";
-        };
+        let selectedOption = "steam";
+        const options = [
+            dom.img("assets/shop/payment-steam.png", "selected", {
+                title: "Steam",
+                onclick() {
+                    selectedOption = "steam";
+                }
+            }),
+            dom.img("assets/shop/payment-card.png", "", {
+                title: "Yandex Card",
+                onclick() {
+                    selectedOption = "yandex-card";
+                    paymentType.value = "AC";
+                }
+            }),
+            dom.img("assets/shop/payment-yandex.png", "", {
+                title: "Yandex",
+                onclick() {
+                    selectedOption = "yandex";
+                    paymentType.value = "PC";
+                },
+            }),
+        ];
+        options.forEach(option => {
+            option.classList.add("payment-option");
+            option.addEventListener("click", () => {
+                options.forEach(option => option.classList.remove("selected"));
+                option.classList.add("selected");
+            });
+        });
 
         var name = productName(product);
         var form = dom.make("form", [
@@ -203,19 +239,34 @@ function Shop() {
             param("sum", product.Cost),
             param("label", order),
             paymentType,
-            T("Select payment method"),
-            dom.wrap("methods", [card, " ", yandex]),
-            dom.button(T("Pay"), "", function() {
-                // firefox won't sumbit form if no button available
-                // so we have to defer panel destruction
-                _.defer(panel.close.bind(panel));
-                return true;
-            }),
-        ]);
+        ], "#payment-form");
         form.action = "https://money.yandex.ru/quickpay/confirm.xml";
         form.method = "POST";
         form.target = "_blank";
-        var panel = new Panel("payment", T("Payment"), form).show();
+        dom.hide(form);
+
+        var iframe = dom.tag("iframe", "#payment-form");
+        iframe.name = "payment-iframe";
+        dom.hide(iframe);
+
+        const panel = new Panel("payment", T("Payment"), [
+            T("Select payment method"),
+            dom.wrap("methods", options),
+            dom.button(T("Pay"), "", (event) => {
+                switch (selectedOption) {
+                case "steam":
+                    // sendOrder({...product, order});
+                    break;
+                default:
+                    form.submit();
+                }
+                // firefox won't sumbit form if no button available
+                // so we have to defer panel destruction
+                _.defer(() => panel.close());
+            }),
+            form,
+            iframe,
+        ]).show();
     }
 
     function param(name, value) {
