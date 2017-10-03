@@ -1505,9 +1505,12 @@ function Controller(game) {
             "death",
             "Death",
             [
-                T("You are dead"),
-                timer,
-                dom.button(T("Revive"), "", revive),
+                dom.img("assets/bg/death.png"),
+                dom.wrap("", [
+                    T("You are dead"),
+                    timer,
+                    dom.button(T("Revive"), "", revive),
+                ])
             ],
             {
                 close: () => clearInterval(interval),
