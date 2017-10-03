@@ -153,7 +153,6 @@ Quest.prototype = {
                     dom.wrap("quest-items-container", [
                         dom.wrap("", goal.Build.map((build, i) => {
                             const done = (built[i]) ? " quest-ok" : "";
-                            console.log(build);
                             return dom.wrap("quest-build-item" + done, [
                                 built[i] && dom.wrap("quest-ok-mark", "✔"), ,
                                 game.controller.craft.makeLink(build),

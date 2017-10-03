@@ -191,7 +191,7 @@ class ContainerSlot {
             this.setSub(this.entity.Type);
         } else if ("Amount" in this.entity) {
             this.setSub(this.entity.Amount);
-            dom.hide(this.sup);
+            this.sup && dom.hide(this.sup);
         } else if (this.entity.SpawnChance > 0) {
             this.setSub(this.entity.SpawnChance);
         } else if (this.entity.isTool()) {
