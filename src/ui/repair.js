@@ -6,6 +6,9 @@ function Repair(npc) {
     const container = {entity: {}};
     const slot = new ContainerSlot(container, 0);
     slot.element.check = ({entity}) => {
+        if (entity.Durability.Current == entity.Durability.Max) {
+            return false;
+        }
         return ["sword", "spear", "bow", "crossbow", "necklace"].includes(entity.Group) || "Armor" in entity;
     };
     slot.element.cleanUp = () => {
@@ -40,6 +43,10 @@ function Repair(npc) {
 
     const wrapper = dom.wrap("repair-slot-wrapper");
     this.panel = new Panel("repair", "Repair", [
+        [
+            T("Armor"),
+            T("Weapon"),
+        ].join(", "),
         this.slot.element,
         dom.wrap("repair-price", [
             T("Price"),
@@ -47,7 +54,7 @@ function Repair(npc) {
             this.price,
         ]),
         this.button,
-        dom.button(T("Repair all"), "", () => {
+        dom.button(T("Repair equipped"), "", () => {
             game.network.send("repair", {Name: "get-price-all", Master: npc.Id}, repairAll);
         }),
     ]).setEntity(npc).show();
@@ -55,8 +62,17 @@ function Repair(npc) {
     container.panel = this.panel;
 
     function repairAll({RepairPrice}) {
-        game.popup.confirm([TT("Repair all for"), " ", Vendor.createPrice(RepairPrice)], () => {
-            game.network.send("repair", {Name: "repair-all", Master: npc.Id});
-        });
+        game.popup.confirm(
+            [
+                TT("Repair all equiped armor and weapon for"),
+                " ",
+                Vendor.createPrice(RepairPrice)
+            ],
+            () => {
+                if (RepairPrice > 0) {
+                    game.network.send("repair", {Name: "repair-all", Master: npc.Id});
+                }
+            }
+        );
     }
 };

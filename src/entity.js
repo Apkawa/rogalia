@@ -131,17 +131,17 @@ Entity.prototype = {
             suffix = sprintf("[%d/%d]", cap.Current,  cap.Max);
             break;
         default:
-            if (this.Name)
+            if (this.Name) {
                 title = this.Name;
+
+                if (this.Group == "pike") {
+                    return title;
+                }
+
+            }
         }
 
         switch (this.Type) {
-        case "steel-pike":
-            var head = Entity.get(_.head(this.Props.Slot));
-            if (head) {
-                return head.Name;
-            }
-            break;
         case "named-point":
             return "Point: " + this.Props.Text;
         }

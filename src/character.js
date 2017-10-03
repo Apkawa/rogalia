@@ -829,6 +829,10 @@ class Character {
         if (this.isPlayer && game.controller.modifier.shift && game.controller.modifier.ctrl) {
             this.drawBowRadius();
         }
+        if (this.isPlayer && this.mount && this.Effects["Arena"] && this.equippedWith("spear")) {
+            game.ctx.fillStyle = "rgba(0, 255, 0, 0.2)";
+            game.iso.fillCircle(this.mount.X, this.mount.Y, 5*CELL_SIZE/2);
+        }
     }
 
     drawUI() {
@@ -1422,6 +1426,14 @@ class Character {
         var right = Entity.get(this.equipSlot("right-hand"));
         if (is(rangedWeaponp)) {
             button.setAction("shot", () => this.shot());
+            return;
+        }
+
+        var spear = is(entity => entity.Type == "bone-spear");
+        if (spear) {
+            button.setAction("spear", () => {
+                game.network.send("waza", {Name: "Spear"});
+            });
             return;
         }
 

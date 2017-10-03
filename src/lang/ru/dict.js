@@ -1954,4 +1954,8 @@ T.dict = {
     "Type": "Тип",
     "Milestone": "Дорожный столб",
     "Repair": "Ремонт",
+    "Repair equipped": "Починить надетое",
+    "Repair all equiped armor and weapon for": "Починить все надетое оружие и броню за",
+    "Spend": "Потратить",
+    "Price": "Цена",
 };

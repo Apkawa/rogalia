@@ -23,6 +23,7 @@ class QuickBar {
                 from && from.unlock();
                 return true;
             };
+            slot.setHotkey(`${this.modifier}+${i+1}`);
             return slot;
         });
         this.panel = new Panel(
@@ -85,7 +86,6 @@ class QuickBar {
         const slot = this.slots[index];
         slot.set(entity);
         const hotkey = index + 1;
-        slot.setSup(`${this.modifier}+${hotkey}`);
     }
 
     clearSlot(index) {

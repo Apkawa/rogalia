@@ -153,9 +153,14 @@ function Shop() {
                 sendOrder(product); // , (data) => pay(product, data.Order)
                 return;
             }
-            game.popup.confirm(TT("Pay {lemons}?", {lemons: product.Cost}), () => {
-                sendOrder(product);
-            });
+            game.popup.confirm(
+                [
+                    `${T("Spend")} ${product.Cost}`,
+                    dom.img(`assets/icons/lemon.png`),
+                    "?",
+                ],
+                () => sendOrder(product)
+            );
         });
         const help = dom.link("#", Shop.descriptions["how-to"], "product-help");
         help.onclick = function(event) {

@@ -315,6 +315,9 @@ function Chat() {
             var cmd = match[1];
             var arg = match[2];
             switch (cmd) {
+            case "countdown":
+                self.countDown(3);
+                break;
             case "where":
                 const {X, Y, Z} = game.player;
                 self.addMessage(`${X} ${Y} ${Z}`);
@@ -1059,5 +1062,16 @@ function Chat() {
 
     this.teleport = function(x, y, z) {
         return this.send(`*teleport ${x} ${y} ${z}`);
+    };
+
+    this.countDown = function(n) {
+        this.send(n.toString());
+        setTimeout(() => {
+            if (n == 1) {
+                this.send("Go!");
+            } else {
+                this.countDown(n-1);
+            }
+        }, 1000);
     };
 }

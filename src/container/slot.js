@@ -20,6 +20,7 @@ class ContainerSlot {
         this.sup = null;
         this.sub = null;
         this.bar = null;
+        this.hotkey = null;
         this.placeholder = null;
 
         this._readonly = false;
@@ -65,7 +66,7 @@ class ContainerSlot {
         this.sub = null;
         this.sup = null;
         this.bar = null;
-        dom.setContents(this.element, this.placeholder);
+        dom.setContents(this.element, [this.placeholder, this.hotkey]);
         this.element.classList.remove("has-item");
         this.element.classList.remove("non-effective");
         this.setTitle(this.placeholder && this.placeholder.title || "");
@@ -91,9 +92,11 @@ class ContainerSlot {
         this.entity = entity;
         this.element.classList.add("has-item");
 
-        this.sup = dom.tag("sup", "quality", {text: entity.Quality});
-        if (entity.almostBroken()) {
-            this.sup.classList.add("almost-broken");
+        if (!this.hotkey) {
+            this.sup = dom.tag("sup", "quality", {text: entity.Quality});
+            if (entity.almostBroken()) {
+                this.sup.classList.add("almost-broken");
+            }
         }
 
         var icon = entity.icon();
@@ -126,6 +129,14 @@ class ContainerSlot {
             dom.append(this.element, this.sub);
         }
         this.sub.textContent = text;
+    }
+
+    setHotkey(text) {
+        if (this.hotkey == null) {
+            this.hotkey = dom.tag("sup", "hotkey");
+            dom.append(this.element, this.hotkey);
+        }
+        this.hotkey.textContent = text;
     }
 
     setBar(percent, cls) {

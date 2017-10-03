@@ -212,9 +212,12 @@ Quest.prototype = {
                     dom.wrap("slot", dom.img("assets/icons/quests/xp.png")),
                     "+" + reward.Xp + "xp",
                 ]),
-                reward.Currency && dom.wrap("quest-gold", [
+                (reward.Currency || reward.Lemons) && dom.wrap("quest-gold", [
                     dom.wrap("slot", dom.img("assets/icons/quests/gold.png")),
-                    Vendor.createPrice(reward.Currency)
+                    dom.wrap("quest-gold-details", [
+                        reward.Lemons && dom.wrap("", [reward.Lemons, dom.img("assets/icons/lemon.png")]),
+                        reward.Currency && Vendor.createPrice(reward.Currency)
+                    ]),
                 ]),
                 reward.Items && this.makeRewardList(reward.Items),
                 reward.Custom && this.data.customReward,

@@ -717,8 +717,11 @@ function Controller(game) {
         ["ctrl", "alt"].forEach(modifier => {
             const quickBar = new QuickBar(modifier);
             this.quickBars[modifier] = quickBar;
-            document.getElementById(`hotbars-${modifier}`).onclick = () => {
+            const button = document.getElementById(`hotbars-${modifier}`);
+            button.textContent = (quickBar.panel.visible) ? "-" : "+";
+            button.onclick = () => {
                 quickBar.panel.toggle();
+                button.textContent = (quickBar.panel.visible) ? "-" : "+";
             };
         });
 
