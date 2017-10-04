@@ -1,4 +1,4 @@
-/* global game, dom, Panel, T, sprintf, TS, util, fetch, fetch, config, Settings, Stage */
+/* global game, dom, Panel, T, sprintf, TS, util, fetch, fetch, config, Settings, Stage, BasicSettings */
 
 "use strict";
 
@@ -46,7 +46,7 @@ function selectServerStage(panel) {
                         T("Settings")
                     ],
                     "settings",
-                    {onclick: settings}
+                    {onclick: () => new BasicSettings()}
                 ),
             ]).hideCloseButton().show().center(0.5, 0.05);
         };
@@ -68,31 +68,6 @@ function selectServerStage(panel) {
             self.panel.close();
             game.setStage("login");
         }
-    }
-
-    function settings() {
-        new Panel("basic-settings", "Settings", [
-            dom.make("label", [
-                T("Language"),
-                dom.select(config.ui.language(), game.lang, "", function() {
-                    game.setLang(this.value);
-                }),
-            ]),
-            dom.hr(),
-            dom.make("p", T("Some graphic cards may fail with accelerated rendering. Disable to fix it.")),
-            dom.wrap("fix-rendering", [
-                dom.button(
-                    (config.graphics.gpuRender)
-                        ? T("Disable GPU rendering")
-                        : T("Enable GPU rendering"),
-                    "",
-                    () => {
-                        Settings.toggle("settings.graphics.gpuRender");
-                        game.reload();
-                    }
-                ),
-            ]),
-        ]).center().show();
     }
 
     function serversTable(servers) {

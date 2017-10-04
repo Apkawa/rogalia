@@ -1,4 +1,4 @@
-/* global game, FormData, dom, Panel, Stage, T, util */
+/* global game, FormData, dom, Panel, Stage, T, util, BasicSettings */
 
 "use strict";
 
@@ -64,6 +64,16 @@ function loginStage() {
             signinButton,
             signupButton,
             cancelSignupButton,
+            dom.hr(),
+            dom.make(
+                "button",
+                [
+                    dom.img("assets/icons/customization.png"),
+                    T("Settings")
+                ],
+                "settings",
+                {onclick: () => new BasicSettings()}
+            ),
         ]);
 
         self.panel = new Panel("login", "",  form)

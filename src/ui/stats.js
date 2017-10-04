@@ -152,7 +152,8 @@ class Stats {
         const mushroom = (joy) ? joy.BonusDamage : 1;
         const alcohol = (player.Effects.Drunk) ? 1.07 : 1;
 
-        return (main + secondary*0.2)*(2 - (str-100))*(1+(0.2 * lvl/100))*mushroom/alcohol;
+        const k = str/100 + 1;
+        return (main + secondary*0.2) * k *(1+(0.2 * lvl/100))*mushroom/alcohol;
 
         function detectMelee(left, right) {
             const empty = {rawDamage: () => 0};
