@@ -218,7 +218,7 @@ Talks.npcs = {
         },
         "actions": {
             "Trade": "商品を見せてください。",
-            "Repair": "I want to repair my stuff",
+            "Repair": "修理してほしい。",
         },
     },
     "boris": {
