@@ -126,8 +126,14 @@ class Stats {
     }
 
     calcDamage(player) {
-        const left = Entity.get(player.equipSlot("left-hand"));
-        const right = Entity.get(player.equipSlot("right-hand"));
+        let left = Entity.get(player.equipSlot("left-hand"));
+        let right = Entity.get(player.equipSlot("right-hand"));
+        if (left && !left.Damage) {
+            left = null;
+        }
+        if (right && !right.Damage) {
+            right = null;
+        }
 
         const str = player.Attr.Strength.Current;
         const dex = player.Attr.Dexterity.Current;;
@@ -154,12 +160,6 @@ class Stats {
                 left = null;
             }
             if (right && right.Range) {
-                right = null;
-            }
-            if (left && !left.Damage) {
-                left = null;
-            }
-            if (right && !right.Damage) {
                 right = null;
             }
             if (left && !right) {

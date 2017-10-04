@@ -4,14 +4,16 @@
 
 function Shop() {
     var self = this;
+    const totalCost = ({Cost, Discount}) =>  Cost * (100 - Discount)/100;
+
     const currency = ({Cost, Discount, Tag}, discount = false) => {
         const cost = (discount)
-              ? Cost * (100 - Discount)/100
+              ? totalCost({Cost, Discount})
               : Cost;
         const bucks = Tag == "lemons";
         return dom.wrap("shop-currency", [
             (bucks) ? "$" : dom.img(`assets/icons/lemon.png`, "shop-currency-icon"),
-            util.toFixed(cost, 2)
+            (bucks) ? util.toFixed(cost, 2) : Math.floor(cost),
         ]);
     };
 
@@ -155,7 +157,7 @@ function Shop() {
             }
             game.popup.confirm(
                 [
-                    `${T("Spend")} ${product.Cost}`,
+                    `${T("Spend")} ${Math.floor(totalCost(product))}`,
                     dom.img(`assets/icons/lemon.png`),
                     "?",
                 ],
