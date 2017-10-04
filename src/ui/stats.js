@@ -156,6 +156,12 @@ class Stats {
             if (right && right.Range) {
                 right = null;
             }
+            if (left && !left.Damage) {
+                left = null;
+            }
+            if (right && !right.Damage) {
+                right = null;
+            }
             if (left && !right) {
                 return [left, empty];
             }
