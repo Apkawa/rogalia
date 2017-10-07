@@ -165,7 +165,11 @@ function Chat() {
             }
             break;
         case game.controller.RMB:
-            game.menu.show(character || self.makeNameActions(name));
+            // party avatar may pass dummy character without getActions
+            const actions = (character && "getActions" in character)
+                ? character
+                :self.makeNameActions(name);
+            game.menu.show(actions);;
             break;
         }
         return true;
