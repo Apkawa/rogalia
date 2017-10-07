@@ -868,8 +868,9 @@ Entity.prototype = {
             break;
         }
 
-        if ("Amount" in this && this.Amount > 1)
+        if ("Amount" in this && this.Amount > 1 && this.Group != "cheque") {
             this.Actions.push("split");
+        }
 
         game.controller.updateItemInfo(this);
     },

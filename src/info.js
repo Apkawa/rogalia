@@ -27,6 +27,13 @@ function Info(message, character) {
     }
 
     switch(this.type) {
+    case "lemons-gain":
+        const tip = dom.wrap("lemons-tip", `+${this.data}`);
+        dom.append(game.controller.shop.panel.button, tip);
+        tip.addEventListener("animationend", () => {
+            dom.remove(tip);
+        });
+        break;
     case "missile":
         game.missiles.push(new Missile(this.data));
         break;
@@ -242,6 +249,15 @@ Info.prototype = {
                 }
             );
             break;
+        case "lemons-gain":
+            this.drawValue(
+                "+" + this.data,
+                {
+                    self: ["#ecc423", big],
+                    other: ["#ecc423"],
+                }
+            );
+            break;
         case "exp-gain":
             this.drawValue(
                 "+" + this.value + "xp",
@@ -370,6 +386,18 @@ Info.prototype = {
             }
         },
         "currency-gain": function() {
+            switch (this.targetType) {
+            case "self":
+                return TT("You've got {value}", {value: this.data});
+            default:
+                return TT("{name} got {value}", {
+                    name: this.character.Name,
+                    value: this.data,
+                    sex: this.character.Sex,
+                });
+            }
+        },
+        "lemons-gain": function() {
             switch (this.targetType) {
             case "self":
                 return TT("You've got {value}", {value: this.data});
