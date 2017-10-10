@@ -146,7 +146,10 @@ class Stats {
             return ranged.rawDamage(true);
         }
 
-        const [main, secondary] = detectMelee(left, right).map(weapon => weapon.rawDamage(true));
+        const [main, secondary] = detectMelee(
+            left,
+            right
+        ).map(weapon => weapon.rawDamage(true));
         const lvl = player.Lvl;
         const joy = player.Effects.MushroomJoy;
         const mushroom = (joy) ? joy.BonusDamage : 1;
@@ -157,22 +160,16 @@ class Stats {
 
         function detectMelee(left, right) {
             const empty = {rawDamage: () => 0};
-            if (left && left.Range) {
-                left = null;
+            if (!left || left.Range) {
+                left = empty;
             }
-            if (right && right.Range) {
-                right = null;
+            if (!right || right.Range) {
+                right = empty;
             }
-            if (left && !right) {
-                return [left, empty];
-            }
-            if (!left && right) {
-                return [right, empty];
-            }
-            if (left.Damage > right.Damage){
-                return [left, right];
-            }
-            return [right, left];
+
+            return (left.Damage > right.Damage)
+                ? [left, right]
+                : [right, left];
         }
 
         function detectRanged(left, right) {

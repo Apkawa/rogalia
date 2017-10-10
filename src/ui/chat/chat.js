@@ -168,7 +168,7 @@ function Chat() {
             // party avatar may pass dummy character without getActions
             const actions = (character && "getActions" in character)
                 ? character
-                :self.makeNameActions(name);
+                : self.makeNameActions(name);
             game.menu.show(actions);;
             break;
         }
