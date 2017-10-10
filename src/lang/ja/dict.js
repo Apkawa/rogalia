@@ -422,7 +422,7 @@ T.dict = {
     "Imperial wall": "帝国風の壁",
     "Imperial window": "帝国風の窓",
     "Imperial wall plan": "帝国風の設計図",
-    "Imperial floor plan": "帝国風の床の設計図"
+    "Imperial floor plan": "帝国風の床の設計図",
     "Industrial arc": "工業風の門",
     "Industrial door": "工業風の扉",
     "Industrial floor": "工業風の床",
